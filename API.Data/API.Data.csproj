@@ -4,7 +4,8 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-    </PropertyGroup>
+      <UserSecretsId>fc4748bb-3724-40db-a5c9-ad25fd0aa675</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
       <Reference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore">
@@ -28,6 +29,7 @@
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     </ItemGroup>
 
 </Project>

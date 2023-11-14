@@ -9,8 +9,7 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     public AppDbContext CreateDbContext(string[] args)
     {
         var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile(Directory.GetCurrentDirectory() + "/../API/appsettings.json")
+            .AddUserSecrets<AppDbContextFactory>()
             .Build();
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
         

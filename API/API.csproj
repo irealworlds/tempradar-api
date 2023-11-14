@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>4403abca-de14-4def-96fa-4017719ffa3c</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,17 +18,17 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Http\Controllers\" />
+        <Folder Include="Http\Controllers\" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\API.Data\API.Data.csproj" />
+        <ProjectReference Include="..\API.Data\API.Data.csproj" />
     </ItemGroup>
 
 </Project>
