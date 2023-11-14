@@ -1,7 +1,7 @@
 ﻿name: "tempradar-api"
 services:
   api:
-    image: api
+    image: tempradar-api:latest
     build:
       context: .
       dockerfile: API/Dockerfile
