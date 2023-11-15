@@ -62,8 +62,6 @@ if (app.Environment.IsDevelopment())
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.MapGroup("/Identity")
-    .MapIdentityApi<ApplicationUser>();
 app.MapControllers();
 
 app.Run();
