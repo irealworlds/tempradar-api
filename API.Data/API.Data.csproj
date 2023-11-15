@@ -32,4 +32,8 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\API.Domain\API.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
