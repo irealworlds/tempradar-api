@@ -7,9 +7,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY *.sln .
 COPY ["API/API.csproj", "API/"]
-COPY ["API.Data/API.Data.csproj", "API.Data/"]
+COPY ["API.Infrastructure/API.Infrastructure.csproj", "API.Infrastructure/"]
 COPY ["API.Domain/API.Domain.csproj", "API.Domain/"]
-COPY ["API.Services/API.Services.csproj", "API.Services/"]
+COPY ["API.Application/API.Application.csproj", "API.Application/"]
 RUN dotnet restore
 COPY . .
 WORKDIR "/src/API"

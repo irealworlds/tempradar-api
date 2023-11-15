@@ -1,9 +1,9 @@
-using API.Data.Entities;
 using API.Domain.Entities;
+using API.Infrastructure.Database.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Data;
+namespace API.Infrastructure.Database;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {

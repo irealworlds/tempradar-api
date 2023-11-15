@@ -4,29 +4,29 @@ using API.Domain.Dto;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace API.Services
+namespace API.Application.Services
 {
-    public class ForecastWeatherApiService : IForecastWeatherApiService
+    public class CurrentWeatherApiService : ICurrentWeatherApiService
     {
         private readonly HttpClient _client;
-        private readonly string baseUrl = "http://api.weatherapi.com/v1/forecast.json";
+        private readonly string baseUrl = "http://api.weatherapi.com/v1/current.json";
 
-        public ForecastWeatherApiService(HttpClient client, IOptions<WeatherApiSettings> options)
+        public CurrentWeatherApiService(HttpClient client, IOptions<WeatherApiSettings> options)
         {
             _client = client;
             baseUrl += $"?key={options.Value.ApiKey}";
         }
 
-        public async Task<WeatherForecastDto> GetWeatherForecastAsync(double lat, double lon)
+        public async Task<CurrentWeatherDto> GetCurrentWeatherAsync(double lat, double lon)
         {
-            var requestUrl = $"{baseUrl}&q={lat},{lon}&days=3&aqi=yes&alerts=no";
+            var requestUrl = $"{baseUrl}&q={lat},{lon}&aqi=yes";
             var response = await _client.GetAsync(requestUrl);
 
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                var weatherForecastDto = JsonConvert.DeserializeObject<WeatherForecastDto>(json);
-                return weatherForecastDto;
+                var currentWeatherDto = JsonConvert.DeserializeObject<CurrentWeatherDto>(json);
+                return currentWeatherDto;
             }
             else
             {
