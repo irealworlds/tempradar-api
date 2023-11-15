@@ -6,5 +6,5 @@ namespace API.Domain.Contracts.Services;
 public interface IIdentityService
 {
     public Task<IdentityDto?> GetIdentityByClaimsPrincipal(ClaimsPrincipal principal);
-    public Task<IdentityDto> CreateIdentity(IIdentityCreationDataDto data);
+    public Task<IdentityDto> CreateIdentity(IdentityCreationDataDto data);
 }

@@ -34,7 +34,7 @@ public class IdentityService(UserManager<ApplicationUser> userManager, IUserStor
         return MapUserToDto(user);
     }
 
-    public async Task<IdentityDto> CreateIdentity(IIdentityCreationDataDto data)
+    public async Task<IdentityDto> CreateIdentity(IdentityCreationDataDto data)
     {
         if (!userManager.SupportsUserEmail)
         {

@@ -3,17 +3,18 @@ using API.Domain.Dto;
 
 namespace API.Http.Requests;
 
-public class IdentityCreateRequest : IIdentityCreationDataDto
+public class IdentityCreateRequest : IdentityCreationDataDto
 {
     [Required]
-    public string FirstName { get; set; } = String.Empty;
+    public new string FirstName { get; set; } = String.Empty;
     
     [Required]
-    public string LastName { get; set; } = String.Empty;
+    public new string LastName { get; set; } = String.Empty;
     
     [Required]
-    public string Password { get; set; } = String.Empty;
+    [EmailAddress]
+    public new string Email { get; set; } = String.Empty;
     
     [Required]
-    public string Email { get; set; } = String.Empty;
+    public new string Password { get; set; } = String.Empty;
 }
