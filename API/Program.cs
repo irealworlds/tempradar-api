@@ -1,9 +1,11 @@
+using API.Application.Contracts;
 using API.Infrastructure;
 using API.Domain.Entities;
 using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
 using API.Application.Services;
 using API.Infrastructure.Database;
+using API.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +48,7 @@ builder.Services.AddScoped<ICurrentWeatherApiService, CurrentWeatherApiService>(
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IAuthSessionService, AuthSessionService>();
+builder.Services.AddScoped<ISignInService, SignInService>();
 
 var app = builder.Build();
 

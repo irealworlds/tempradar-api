@@ -1,18 +1,16 @@
+using API.Application.Contracts;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
-using API.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
 
 namespace API.Application.Services;
 
-public class AuthSessionService(SignInManager<ApplicationUser> signInManager) : IAuthSessionService
+public class AuthSessionService(ISignInService signInService) : IAuthSessionService
 {
     public async Task Create(AuthSessionCreationDataDto data)
     {
         const bool isPersistent = true;
-        signInManager.AuthenticationScheme = IdentityConstants.ApplicationScheme;
         
-        var result = await signInManager.PasswordSignInAsync(
+        var result = await signInService.PasswordSignInAsync(
             data.Email,
             data.Password,
             isPersistent,
@@ -23,7 +21,7 @@ public class AuthSessionService(SignInManager<ApplicationUser> signInManager) : 
         {
             if (!string.IsNullOrEmpty(data.TwoFactorCode))
             {
-                result = await signInManager.TwoFactorAuthenticatorSignInAsync(
+                result = await signInService.TwoFactorAuthenticatorSignInAsync(
                     data.TwoFactorCode,
                     isPersistent,
                     rememberClient: isPersistent
@@ -31,7 +29,7 @@ public class AuthSessionService(SignInManager<ApplicationUser> signInManager) : 
             }
             else if (!string.IsNullOrEmpty(data.TwoFactorRecoveryCode))
             {
-                result = await signInManager.TwoFactorRecoveryCodeSignInAsync(
+                result = await signInService.TwoFactorRecoveryCodeSignInAsync(
                     data.TwoFactorRecoveryCode
                 );
             }
@@ -48,6 +46,6 @@ public class AuthSessionService(SignInManager<ApplicationUser> signInManager) : 
 
     public async Task InvalidateCurrentSession()
     {
-        await signInManager.SignOutAsync();
+        await signInService.SignOutAsync();
     }
 }
