@@ -1,4 +1,4 @@
-﻿using API.Domain.DTO;
+﻿using API.Domain.Dto;
 
 namespace API.Domain.Contracts.Services
 {

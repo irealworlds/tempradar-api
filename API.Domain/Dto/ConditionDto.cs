@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace API.Domain.DTO
+namespace API.Domain.Dto
 {
     public class ConditionDto
     {

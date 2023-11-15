@@ -1,6 +1,6 @@
 ﻿using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
-using API.Domain.DTO;
+using API.Domain.Dto;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
