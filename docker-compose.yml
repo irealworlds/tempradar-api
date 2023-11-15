@@ -1,18 +1,20 @@
 ﻿name: "tempradar-api"
 services:
-#  api:
-#    image: tempradar-api:latest
-#    build:
-#      context: .
-#      dockerfile: API/Dockerfile
-#    environment:
-#      - ASPNETCORE_ENVIRONMENT=Development
-#      - ConnectionString=Server=sqldata;Database=Tempradar;User Id=sa;Password="${SQL_SERVER_PASSWORD}";TrustServerCertificate=true;
-#    ports:
-#      - "8001:80"
-#      - "8000:443"
-#    depends_on:
-#      - sqldata
+  api:
+    image: tempradar-api:latest
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTPS_PORT=https://+:443
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionString=Server=sqldata;Database=Tempradar;User Id=sa;Password="${SQL_SERVER_PASSWORD}";TrustServerCertificate=true;
+    ports:
+      - "8001:80"
+      - "8000:443"
+    depends_on:
+      - sqldata
   sqldata:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     ports:
