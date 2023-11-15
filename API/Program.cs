@@ -1,5 +1,7 @@
 using API.Data;
+using API.Domain.Contracts.Services;
 using API.Domain.Entities;
+using API.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +38,8 @@ builder.Services.AddIdentityCore<ApplicationUser>()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 var app = builder.Build();
 
