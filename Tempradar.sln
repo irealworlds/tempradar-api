@@ -10,11 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.dev.yml = docker-compose.dev.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Data", "API.Data\API.Data.csproj", "{7251F2BB-8BD7-498F-B82A-67F9E6A92AD0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Infrastructure", "API.Infrastructure\API.Infrastructure.csproj", "{7251F2BB-8BD7-498F-B82A-67F9E6A92AD0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Domain", "API.Domain\API.Domain.csproj", "{37C84049-239F-4562-9026-6B626E705087}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Services", "API.Services\API.Services.csproj", "{37E39890-08BC-4FEA-A32A-B8C045D535B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Application", "API.Application\API.Application.csproj", "{37E39890-08BC-4FEA-A32A-B8C045D535B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -3,7 +3,7 @@ using API.Domain.Dto;
 using API.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace API.Services;
+namespace API.Application.Services;
 
 public class AuthSessionService(SignInManager<ApplicationUser> signInManager) : IAuthSessionService
 {

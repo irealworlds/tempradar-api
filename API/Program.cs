@@ -1,8 +1,9 @@
-using API.Data;
+using API.Infrastructure;
 using API.Domain.Entities;
 using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
-using API.Services;
+using API.Application.Services;
+using API.Infrastructure.Database;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
