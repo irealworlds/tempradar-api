@@ -1,6 +1,7 @@
 using API.Data;
-using API.Domain.Contracts.Services;
 using API.Domain.Entities;
+using API.Domain.Contracts.Configuration;
+using API.Domain.Contracts.Services;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -25,12 +26,10 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
         };
     }); 
 builder.Services.AddAuthorizationBuilder();
-
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration["ConnectionString"]);
 });
-
 builder.Services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddApiEndpoints();
@@ -38,6 +37,11 @@ builder.Services.AddIdentityCore<ApplicationUser>()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddHttpClient();
+builder.Services.Configure<WeatherApiSettings>(builder.Configuration.GetSection("WeatherAPI"));
+builder.Services.AddScoped<IForecastWeatherApiService, ForecastWeatherApiService>();
+builder.Services.AddScoped<ICurrentWeatherApiService, CurrentWeatherApiService>();
 
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IAuthSessionService, AuthSessionService>();
@@ -51,7 +55,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseCors(policyBuilder =>
     {
-        policyBuilder.WithOrigins("http://localhost:4200", "https://localhost:4200", "http://127.0.0.1:4200", "https://127.0.0.1:4200")
+        policyBuilder
+            .WithOrigins(
+                "http://localhost:4200",
+                "https://localhost:4200",
+                "http://127.0.0.1:4200",
+                "https://127.0.0.1:4200"
+            )
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
