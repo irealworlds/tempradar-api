@@ -1,7 +1,6 @@
 using System.Net;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
-using API.Http.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,14 +15,8 @@ public class IdentitiesController(IIdentityService identityService) : Controller
     [ActionName(nameof(CreateAsync))]
     [ProducesResponseType(typeof(IdentityDto), (int) HttpStatusCode.Created)]
     [ProducesResponseType((int) HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> CreateAsync([FromBody] IdentityCreateRequestDto requestDto)
+    public async Task<IActionResult> CreateAsync([FromBody] IdentityCreationDataDto requestDto)
     {
-        // Make sure the validation passes
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
         // Create the identity
         IdentityDto user;
         try

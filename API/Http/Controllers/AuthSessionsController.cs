@@ -1,11 +1,7 @@
-
 using System.Net;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
-using API.Domain.Entities;
-using API.Http.Requests;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Http.Controllers
