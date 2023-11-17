@@ -4,7 +4,9 @@ using API.Domain.Entities;
 using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
 using API.Application.Services;
+using API.Domain.Repositories;
 using API.Infrastructure.Database;
+using API.Infrastructure.Repositories;
 using API.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -61,6 +63,9 @@ builder.Services.AddScoped<ICurrentWeatherApiService, CurrentWeatherApiService>(
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IAuthSessionService, AuthSessionService>();
 builder.Services.AddScoped<ISignInService, SignInService>();
+
+// Register repositories
+builder.Services.AddScoped<IPinnedCityRepository, PinnedCityRepository>();
 
 var app = builder.Build();
 

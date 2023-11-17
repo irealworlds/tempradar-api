@@ -1,6 +1,8 @@
+using API.Domain.Contracts;
+
 namespace API.Domain.Entities;
 
-public class PinnedCity
+public class PinnedCity : IEntity<Guid>
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Name { get; set; }
