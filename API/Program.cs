@@ -1,11 +1,13 @@
+using System.Reflection;
 using API.Application.Contracts;
-using API.Infrastructure;
 using API.Domain.Entities;
 using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
 using API.Application.Services;
 using API.Infrastructure.Database;
 using API.Services;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -41,11 +43,21 @@ builder.Services.AddIdentityCore<ApplicationUser>()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add validation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblies(
+    Assembly.GetExecutingAssembly()
+        .GetReferencedAssemblies()
+        .Select(Assembly.Load)
+);
+
+// Enable the HTTP Client
 builder.Services.AddHttpClient();
+
+// Register application services
 builder.Services.Configure<WeatherApiSettings>(builder.Configuration.GetSection("WeatherAPI"));
 builder.Services.AddScoped<IForecastWeatherApiService, ForecastWeatherApiService>();
 builder.Services.AddScoped<ICurrentWeatherApiService, CurrentWeatherApiService>();
-
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IAuthSessionService, AuthSessionService>();
 builder.Services.AddScoped<ISignInService, SignInService>();
@@ -57,8 +69,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseCors(policyBuilder =>
-    {
+    app.UseCors(policyBuilder => {
         policyBuilder
             .WithOrigins(
                 "http://localhost:4200",

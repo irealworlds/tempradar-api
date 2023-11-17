@@ -14,4 +14,10 @@
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="FluentValidation">
+        <HintPath>..\..\..\..\..\.nuget\packages\fluentvalidation\11.5.1\lib\net7.0\FluentValidation.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
