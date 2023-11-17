@@ -1,12 +1,13 @@
 using System.Linq.Expressions;
 using API.Domain.Repositories;
 using API.Domain.Contracts;
+using API.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using API.Infrastructure.Helpers;
 
 namespace API.Infrastructure.Repositories;
 
-public class AbstractRepository<TEntity, TEntityKey>(DbContext dbContext) : IRepository<TEntity, TEntityKey>
+public class AbstractRepository<TEntity, TEntityKey>(AppDbContext dbContext) : IRepository<TEntity, TEntityKey>
     where TEntity : class, IEntity<TEntityKey>
 {
     private readonly DbSet<TEntity> _entities = dbContext.Set<TEntity>();
