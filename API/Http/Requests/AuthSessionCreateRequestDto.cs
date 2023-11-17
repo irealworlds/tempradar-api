@@ -3,7 +3,7 @@ using API.Domain.Dto;
 
 namespace API.Http.Requests;
 
-public class AuthSessionCreateRequest : AuthSessionCreationDataDto
+public class AuthSessionCreateRequestDto : AuthSessionCreationDataDto
 {
     [Required]
     [EmailAddress]

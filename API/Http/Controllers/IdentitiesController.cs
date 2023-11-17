@@ -16,7 +16,7 @@ public class IdentitiesController(IIdentityService identityService) : Controller
     [ActionName(nameof(CreateAsync))]
     [ProducesResponseType(typeof(IdentityDto), (int) HttpStatusCode.Created)]
     [ProducesResponseType((int) HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> CreateAsync([FromBody] IdentityCreateRequest request)
+    public async Task<IActionResult> CreateAsync([FromBody] IdentityCreateRequestDto requestDto)
     {
         // Make sure the validation passes
         if (!ModelState.IsValid)
@@ -28,7 +28,7 @@ public class IdentitiesController(IIdentityService identityService) : Controller
         IdentityDto user;
         try
         {
-            user = await identityService.CreateIdentity(request);
+            user = await identityService.CreateIdentity(requestDto);
         }
         catch (ArgumentException e)
         {

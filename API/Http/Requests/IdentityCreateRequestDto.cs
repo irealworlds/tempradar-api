@@ -3,7 +3,7 @@ using API.Domain.Dto;
 
 namespace API.Http.Requests;
 
-public class IdentityCreateRequest : IdentityCreationDataDto
+public class IdentityCreateRequestDto : IdentityCreationDataDto
 {
     [Required]
     public new string FirstName { get; set; } = String.Empty;
