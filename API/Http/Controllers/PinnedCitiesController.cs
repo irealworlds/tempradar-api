@@ -61,7 +61,7 @@ public class PinnedCitiesController(IPinnedCityService pinnedCityService) : Cont
         return CreatedAtAction(nameof(CreateAsync), city);
     }
 
-    [HttpPut]
+    [HttpPut("{id:guid}")]
     [Authorize]
     [ActionName(nameof(UpdateAsync))]
     public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] CreatePinnedCityDto pinnedCityDto)
@@ -78,7 +78,7 @@ public class PinnedCitiesController(IPinnedCityService pinnedCityService) : Cont
                 return BadRequest(ModelState);
             }
 
-            await pinnedCityService.UpdatePinnedCity(id, pinnedCityDto);
+            await pinnedCityService.UpdatePinnedCityAsync(id, pinnedCityDto);
 
             return Ok("Pinned city updated successfully");
         }
@@ -88,4 +88,25 @@ public class PinnedCitiesController(IPinnedCityService pinnedCityService) : Cont
         }
     }
 
+    [HttpDelete("{id:guid}")]
+    [Authorize]
+    [ActionName(nameof(DeleteAsync))]
+    public async Task<IActionResult> DeleteAsync(Guid id)
+    {
+        try
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest("Invalid id parameter");
+            }
+
+            await pinnedCityService.DeletePinnedCityByIdAsync(id);
+
+            return Ok("Pinned city deleted successfully");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "An error occurred while deleting the pinned city: " + ex.Message);
+        }
+    }
 }

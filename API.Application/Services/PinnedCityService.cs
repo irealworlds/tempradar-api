@@ -134,7 +134,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
         };
     }
 
-    public async Task UpdatePinnedCity(Guid id, CreatePinnedCityDto pinnedCityDto)
+    public async Task UpdatePinnedCityAsync(Guid id, CreatePinnedCityDto pinnedCityDto)
     {
         var pinnedCityToUpdate = await repository.GetByIdAsync(id);
 
@@ -145,6 +145,17 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
             pinnedCityToUpdate.Latitude = pinnedCityDto.Latitude;
 
             await repository.UpdateAsync(pinnedCityToUpdate);
+            await repository.SaveChangesAsync();
+        }
+    }
+
+    public async Task DeletePinnedCityByIdAsync(Guid id)
+    {
+        var pinnedCityToDelete = await repository.GetByIdAsync(id);
+
+        if (pinnedCityToDelete != null)
+        {
+            await repository.DeleteAsync(pinnedCityToDelete);
             await repository.SaveChangesAsync();
         }
     }
