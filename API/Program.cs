@@ -1,9 +1,8 @@
-using System.Reflection;
 using API.Application.Contracts;
-using API.Domain.Entities;
+using API.Application.Services;
 using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
-using API.Application.Services;
+using API.Domain.Entities;
 using API.Domain.Repositories;
 using API.Infrastructure.Database;
 using API.Infrastructure.Repositories;
@@ -14,6 +13,7 @@ using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +32,7 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
                 return Task.CompletedTask;
             }
         };
-    }); 
+    });
 builder.Services.AddAuthorizationBuilder();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -63,6 +63,7 @@ builder.Services.Configure<WeatherApiSettings>(builder.Configuration.GetSection(
 builder.Services.AddScoped<IForecastWeatherApiService, ForecastWeatherApiService>();
 builder.Services.AddScoped<ICurrentWeatherApiService, CurrentWeatherApiService>();
 builder.Services.AddScoped<IPinnedCityService, PinnedCityService>();
+builder.Services.AddScoped<IPinnedCityWeatherService, PinnedCityWeatherService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IAuthSessionService, AuthSessionService>();
 builder.Services.AddScoped<ISignInService, SignInService>();
@@ -78,7 +79,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseCors(policyBuilder => {
+    app.UseCors(policyBuilder =>
+    {
         policyBuilder
             .WithOrigins(
                 "http://localhost:4200",
@@ -90,7 +92,9 @@ if (app.Environment.IsDevelopment())
             .AllowAnyMethod()
             .AllowCredentials();
     });
-} else {    
+}
+else
+{
     app.UseHttpsRedirection();
 }
 
