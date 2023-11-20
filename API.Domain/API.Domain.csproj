@@ -7,17 +7,13 @@
     </PropertyGroup>
     
     <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="11.8.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="FluentValidation">
-        <HintPath>..\..\..\..\..\.nuget\packages\fluentvalidation\11.5.1\lib\net7.0\FluentValidation.dll</HintPath>
-      </Reference>
-    </ItemGroup>
+	
 
 </Project>

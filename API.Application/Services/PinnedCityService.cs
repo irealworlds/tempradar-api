@@ -1,10 +1,10 @@
-using System.Linq.Expressions;
-using System.Security.Claims;
 using API.Application.Contracts;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
 using API.Domain.Entities;
 using API.Domain.Repositories;
+using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace API.Application.Services;
 
@@ -54,14 +54,14 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
         var cityFilterExpressions = new List<Expression<Func<PinnedCity, bool>>> {
             city => city.UserId.Equals(user.Id)
         };
-        
+
         var cities = await repository.GetAllAsync(
             pagination.Skip,
             pagination.Limit,
             cityFilterExpressions
         );
         var total = await repository.Count(cityFilterExpressions);
-        
+
         return new PaginatedResultDto<PinnedCityDto>
         {
             Items = cities.Select(city => new PinnedCityDto
@@ -83,7 +83,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
         {
             throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
         }
-        
+
         return await CreateForUserAsync(user, data);
     }
 
@@ -97,7 +97,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
             User = user,
             UserId = user.Id
         };
-        
+
         if (String.IsNullOrEmpty(city.Name))
         {
             city.Name = "Unknown";
@@ -119,12 +119,12 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
     public async Task<PinnedCityDto?> GetByIdAsync(Guid id)
     {
         var city = await repository.GetByIdAsync(id);
-        
+
         if (city == null)
         {
             return null;
         }
-        
+
         return new PinnedCityDto
         {
             Id = city.Id,
