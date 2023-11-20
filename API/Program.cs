@@ -10,6 +10,7 @@ using API.Infrastructure.Repositories;
 using API.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +53,7 @@ builder.Services.AddValidatorsFromAssemblies(
         .GetReferencedAssemblies()
         .Select(Assembly.Load)
 );
+builder.Services.AddFluentValidationRulesToSwagger();
 
 // Enable the HTTP Client
 builder.Services.AddHttpClient();
