@@ -34,6 +34,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
             Name = city.Name,
             Latitude = city.Latitude,
             Longitude = city.Longitude,
+            CreatedAt = city.CreatedAt,
         });
     }
 
@@ -70,6 +71,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
                 Name = city.Name,
                 Latitude = city.Latitude,
                 Longitude = city.Longitude,
+                CreatedAt = city.CreatedAt,
             }),
             Total = total
         };
@@ -113,6 +115,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
             Name = city.Name,
             Latitude = city.Latitude,
             Longitude = city.Longitude,
+            CreatedAt = city.CreatedAt,
         };
     }
 
@@ -131,6 +134,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
             Name = city.Name,
             Latitude = city.Latitude,
             Longitude = city.Longitude,
+            CreatedAt = city.CreatedAt,
         };
     }
 
