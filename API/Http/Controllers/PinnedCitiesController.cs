@@ -68,19 +68,18 @@ public class PinnedCitiesController(IPinnedCityService pinnedCityService) : Cont
     {
         try
         {
-            if (id == Guid.Empty)
+            var updatedCity = await pinnedCityService.UpdatePinnedCityAsync(id, pinnedCityDto);
+
+            return Ok(updatedCity);
+        }
+        catch (ArgumentException exception)
+        {
+            if (exception.ParamName is nameof(id))
             {
-                return BadRequest("Invalid id parameter");
+                return NotFound();
             }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            await pinnedCityService.UpdatePinnedCityAsync(id, pinnedCityDto);
-
-            return Ok("Pinned city updated successfully");
+            throw;
         }
         catch (Exception ex)
         {
@@ -95,14 +94,18 @@ public class PinnedCitiesController(IPinnedCityService pinnedCityService) : Cont
     {
         try
         {
-            if (id == Guid.Empty)
-            {
-                return BadRequest("Invalid id parameter");
-            }
-
             await pinnedCityService.DeletePinnedCityByIdAsync(id);
 
-            return Ok("Pinned city deleted successfully");
+            return NoContent();
+        }
+        catch (ArgumentException exception)
+        {
+            if (exception.ParamName is nameof(id))
+            {
+                return NotFound();
+            }
+
+            throw;
         }
         catch (Exception ex)
         {

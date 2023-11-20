@@ -138,29 +138,42 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
         };
     }
 
-    public async Task UpdatePinnedCityAsync(Guid id, CreatePinnedCityDto pinnedCityDto)
+    public async Task<PinnedCityDto> UpdatePinnedCityAsync(Guid id, CreatePinnedCityDto pinnedCityDto)
     {
-        var pinnedCityToUpdate = await repository.GetByIdAsync(id);
+        var city = await repository.GetByIdAsync(id);
 
-        if (pinnedCityToUpdate != null)
+        if (city == null)
         {
-            pinnedCityToUpdate.Name = pinnedCityDto.Name;
-            pinnedCityToUpdate.Longitude = pinnedCityDto.Longitude;
-            pinnedCityToUpdate.Latitude = pinnedCityDto.Latitude;
-
-            await repository.UpdateAsync(pinnedCityToUpdate);
-            await repository.SaveChangesAsync();
+            throw new ArgumentException("Could not find pinned city by id: " + id, nameof(id));
         }
+        
+        city.Name = pinnedCityDto.Name;
+        city.Longitude = pinnedCityDto.Longitude;
+        city.Latitude = pinnedCityDto.Latitude;
+
+        await repository.UpdateAsync(city);
+        await repository.SaveChangesAsync();
+
+        return new PinnedCityDto
+        {
+            Id = city.Id,
+            Name = city.Name,
+            Latitude = city.Latitude,
+            Longitude = city.Longitude,
+            CreatedAt = city.CreatedAt,
+        };
     }
 
     public async Task DeletePinnedCityByIdAsync(Guid id)
     {
         var pinnedCityToDelete = await repository.GetByIdAsync(id);
 
-        if (pinnedCityToDelete != null)
+        if (pinnedCityToDelete == null)
         {
-            await repository.DeleteAsync(pinnedCityToDelete);
-            await repository.SaveChangesAsync();
+            throw new ArgumentException("Could not find pinned city by id: " + id, nameof(id));
         }
+        
+        await repository.DeleteAsync(pinnedCityToDelete);
+        await repository.SaveChangesAsync();
     }
 }

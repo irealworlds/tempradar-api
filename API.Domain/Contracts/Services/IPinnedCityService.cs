@@ -16,7 +16,7 @@ public interface IPinnedCityService
 
     public Task<PinnedCityDto?> GetByIdAsync(Guid id);
 
-    Task UpdatePinnedCityAsync(Guid id, CreatePinnedCityDto pinnedCityDto);
+    public Task<PinnedCityDto> UpdatePinnedCityAsync(Guid id, CreatePinnedCityDto pinnedCityDto);
 
-    Task DeletePinnedCityByIdAsync(Guid id);
+    public Task DeletePinnedCityByIdAsync(Guid id);
 }
