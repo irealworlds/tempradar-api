@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using API.Application.Contracts;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
 using API.Domain.Entities;
@@ -5,15 +7,29 @@ using API.Domain.Repositories;
 
 namespace API.Application.Services;
 
-public class PinnedCityService(IPinnedCityRepository repository) : IPinnedCityService
+public class PinnedCityService(IUserService userService, IPinnedCityRepository repository) : IPinnedCityService
 {
-    public async Task<PinnedCityDto> CreateAsync(CreatePinnedCityDto data)
+    public async Task<PinnedCityDto> CreateForUserAsync(ClaimsPrincipal principal, CreatePinnedCityDto data)
     {
-        var city = new PinnedCity()
+        var user = await userService.GetUserAsync(principal);
+
+        if (user == null)
+        {
+            throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
+        }
+        
+        return await CreateForUserAsync(user, data);
+    }
+
+    public async Task<PinnedCityDto> CreateForUserAsync(ApplicationUser user, CreatePinnedCityDto data)
+    {
+        var city = new PinnedCity
         {
             Name = data.Name,
             Latitude = data.Latitude,
-            Longitude = data.Longitude
+            Longitude = data.Longitude,
+            User = user,
+            UserId = user.Id
         };
         
         if (String.IsNullOrEmpty(city.Name))

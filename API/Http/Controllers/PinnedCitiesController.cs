@@ -18,7 +18,7 @@ public class PinnedCitiesController(IPinnedCityService pinnedCityService) : Cont
     [ProducesResponseType((int) HttpStatusCode.BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] CreatePinnedCityDto pinnedCityDto)
     {
-        var city = await pinnedCityService.CreateAsync(pinnedCityDto);
+        var city = await pinnedCityService.CreateForUserAsync(HttpContext.User, pinnedCityDto);
         return CreatedAtAction(nameof(ShowAsync), new { id = city.Id }, city);
     }
     

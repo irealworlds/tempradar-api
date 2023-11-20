@@ -63,6 +63,7 @@ builder.Services.AddScoped<ICurrentWeatherApiService, CurrentWeatherApiService>(
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IAuthSessionService, AuthSessionService>();
 builder.Services.AddScoped<ISignInService, SignInService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Register repositories
 builder.Services.AddScoped<IPinnedCityRepository, PinnedCityRepository>();
