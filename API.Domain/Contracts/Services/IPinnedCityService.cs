@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using API.Domain.Dto;
 using API.Domain.Entities;
+using System.Security.Claims;
 
 namespace API.Domain.Contracts.Services;
 
@@ -15,4 +15,6 @@ public interface IPinnedCityService
     public Task<PinnedCityDto> CreateForUserAsync(ApplicationUser user, CreatePinnedCityDto data);
 
     public Task<PinnedCityDto?> GetByIdAsync(Guid id);
+
+    Task UpdatePinnedCity(Guid id, CreatePinnedCityDto pinnedCityDto);
 }
