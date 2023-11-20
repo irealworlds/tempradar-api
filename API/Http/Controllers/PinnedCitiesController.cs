@@ -10,6 +10,26 @@ namespace API.Http.Controllers;
 [Route("[controller]")]
 public class PinnedCitiesController(IPinnedCityService pinnedCityService) : ControllerBase
 {
+    [HttpGet]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(IEnumerable<PinnedCityDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+    public async Task<IActionResult> IndexAsync()
+    {
+        var cities = await pinnedCityService.GetForUserAsync(HttpContext.User);
+        return Ok(cities);
+    }
+
+    [HttpGet("Paginated")]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(PaginatedResultDto<PinnedCityDto>), (int) HttpStatusCode.OK)]
+    [ProducesResponseType((int) HttpStatusCode.Unauthorized)]
+    public async Task<IActionResult> IndexAsync([FromQuery] PaginationOptionsDto pagination)
+    {
+        var cities = await pinnedCityService.GetPaginatedForUserAsync(HttpContext.User, pagination);
+        return Ok(cities);
+    }
+    
     [HttpPost]
     [Authorize]
     [ActionName(nameof(CreateAsync))]
