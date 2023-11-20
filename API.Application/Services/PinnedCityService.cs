@@ -39,6 +39,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
         }
 
         await repository.AddAsync(city);
+        await repository.SaveChangesAsync();
 
         return new PinnedCityDto
         {
