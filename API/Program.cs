@@ -60,6 +60,7 @@ builder.Services.AddHttpClient();
 builder.Services.Configure<WeatherApiSettings>(builder.Configuration.GetSection("WeatherAPI"));
 builder.Services.AddScoped<IForecastWeatherApiService, ForecastWeatherApiService>();
 builder.Services.AddScoped<ICurrentWeatherApiService, CurrentWeatherApiService>();
+builder.Services.AddScoped<IPinnedCityService, PinnedCityService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IAuthSessionService, AuthSessionService>();
 builder.Services.AddScoped<ISignInService, SignInService>();
