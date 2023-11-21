@@ -56,6 +56,13 @@ builder.Services.AddValidatorsFromAssemblies(
 );
 builder.Services.AddFluentValidationRulesToSwagger();
 
+// Add AutoMapper
+builder.Services.AddAutoMapper(
+    Assembly.GetExecutingAssembly()
+        .GetReferencedAssemblies()
+        .Select(Assembly.Load)
+);
+
 // Enable the HTTP Client
 builder.Services.AddHttpClient();
 

@@ -5,10 +5,11 @@ using API.Domain.Entities;
 using API.Domain.Repositories;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using AutoMapper;
 
 namespace API.Application.Services;
 
-public class PinnedCityService(IUserService userService, IPinnedCityRepository repository) : IPinnedCityService
+public class PinnedCityService(IUserService userService, IPinnedCityRepository repository, IMapper mapper) : IPinnedCityService
 {
     public async Task<IEnumerable<PinnedCityDto>> GetForUserAsync(ClaimsPrincipal principal)
     {
@@ -28,14 +29,8 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
         {
             city => city.UserId.Equals(user.Id)
         });
-        return cities.Select(city => new PinnedCityDto
-        {
-            Id = city.Id,
-            Name = city.Name,
-            Latitude = city.Latitude,
-            Longitude = city.Longitude,
-            CreatedAt = city.CreatedAt,
-        });
+
+        return cities.Select(mapper.Map<PinnedCityDto>);
     }
 
     public async Task<PaginatedResultDto<PinnedCityDto>> GetPaginatedForUserAsync(ClaimsPrincipal principal, PaginationOptionsDto pagination)
@@ -65,14 +60,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
 
         return new PaginatedResultDto<PinnedCityDto>
         {
-            Items = cities.Select(city => new PinnedCityDto
-            {
-                Id = city.Id,
-                Name = city.Name,
-                Latitude = city.Latitude,
-                Longitude = city.Longitude,
-                CreatedAt = city.CreatedAt,
-            }),
+            Items = cities.Select(mapper.Map<PinnedCityDto>),
             Total = total
         };
     }
@@ -109,14 +97,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
         await repository.AddAsync(city);
         await repository.SaveChangesAsync();
 
-        return new PinnedCityDto
-        {
-            Id = city.Id,
-            Name = city.Name,
-            Latitude = city.Latitude,
-            Longitude = city.Longitude,
-            CreatedAt = city.CreatedAt,
-        };
+        return mapper.Map<PinnedCityDto>(city);
     }
 
     public async Task<PinnedCityDto?> GetByIdAsync(Guid id)
@@ -128,14 +109,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
             return null;
         }
 
-        return new PinnedCityDto
-        {
-            Id = city.Id,
-            Name = city.Name,
-            Latitude = city.Latitude,
-            Longitude = city.Longitude,
-            CreatedAt = city.CreatedAt,
-        };
+        return mapper.Map<PinnedCityDto>(city);
     }
 
     public async Task<PinnedCityDto> UpdatePinnedCityAsync(Guid id, CreatePinnedCityDto pinnedCityDto)
@@ -154,14 +128,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
         await repository.UpdateAsync(city);
         await repository.SaveChangesAsync();
 
-        return new PinnedCityDto
-        {
-            Id = city.Id,
-            Name = city.Name,
-            Latitude = city.Latitude,
-            Longitude = city.Longitude,
-            CreatedAt = city.CreatedAt,
-        };
+        return mapper.Map<PinnedCityDto>(city);
     }
 
     public async Task DeletePinnedCityByIdAsync(Guid id)
