@@ -1,19 +1,18 @@
-﻿namespace API.Domain.Dto
+﻿namespace API.Domain.Dto;
+
+public class PinnedCityWeatherDetailsDto
 {
-    public class PinnedCityWeatherDetailsDto
-    {
-        public double TempC { get; set; }
-        public double FeelsLikeC { get; set; }
-        public double WindKph { get; set; }
-        public double PressureMb { get; set; }
-        public double UV { get; set; }
-        public double CO { get; set; }
-        public double NO2 { get; set; }
-        public double O3 { get; set; }
-        public double SO2 { get; set; }
-        public double PM2_5 { get; set; }
-        public double PM10 { get; set; }
-        public int USEPAIndex { get; set; }
-        public int GBDefraIndex { get; set; }
-    }
+    public double Temperature { get; set; }
+    public double FeelsLikeTemperature { get; set; }
+    public double WindSpeed { get; set; }
+    public double AtmosphericPressure { get; set; }
+    public double UltravioletIndex { get; set; }
+    public double CarbonMonoxide { get; set; }
+    public double NitrogenDioxide { get; set; }
+    public double Ozone { get; set; }
+    public double SulphurDioxide { get; set; }
+    public double Pm25 { get; set; }
+    public double Pm10 { get; set; }
+    public int UsEpaIndex { get; set; }
+    public int GbDefraIndex { get; set; }
 }

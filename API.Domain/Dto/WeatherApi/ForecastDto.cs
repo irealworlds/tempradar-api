@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace API.Domain.Dto
+namespace API.Domain.Dto.WeatherApi
 {
     public class ForecastDto
     {

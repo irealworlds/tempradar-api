@@ -1,9 +1,8 @@
-﻿using API.Domain.Dto;
+﻿using API.Domain.Dto.WeatherApi;
 
-namespace API.Domain.Contracts.Services
+namespace API.Domain.Contracts.Services;
+
+public interface IForecastWeatherApiService
 {
-    public interface IForecastWeatherApiService
-    {
-        Task<WeatherForecastDto> GetWeatherForecastAsync(double latitude, double longitude);
-    }
+    public Task<WeatherForecastDto> GetWeatherForecastForLocationAsync(double latitude, double longitude);
 }

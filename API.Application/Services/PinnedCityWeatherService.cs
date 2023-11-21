@@ -14,7 +14,7 @@ namespace API.Application.Services
                 return null;
             }
 
-            var weather = await currentWeatherApiService.GetCurrentWeatherAsync(city.Latitude, city.Longitude);
+            var weather = await currentWeatherApiService.GetCurrentWeatherForLocationAsync(city.Latitude, city.Longitude);
 
             if (weather == null)
             {
@@ -23,19 +23,19 @@ namespace API.Application.Services
 
             var details = new PinnedCityWeatherDetailsDto
             {
-                TempC = weather.Current.TempC,
-                FeelsLikeC = weather.Current.FeelsLikeC,
-                WindKph = weather.Current.WindKph,
-                PressureMb = weather.Current.PressureMb,
-                UV = weather.Current.UV,
-                CO = weather.Current.AirQuality.CO,
-                NO2 = weather.Current.AirQuality.NO2,
-                O3 = weather.Current.AirQuality.O3,
-                SO2 = weather.Current.AirQuality.SO2,
-                PM2_5 = weather.Current.AirQuality.PM2_5,
-                PM10 = weather.Current.AirQuality.PM10,
-                USEPAIndex = weather.Current.AirQuality.USEPAIndex,
-                GBDefraIndex = weather.Current.AirQuality.GBDefraIndex
+                Temperature = weather.Current!.TempC,
+                FeelsLikeTemperature = weather.Current.FeelsLikeC,
+                WindSpeed = weather.Current.WindKph,
+                AtmosphericPressure = weather.Current.PressureMb,
+                UltravioletIndex = weather.Current.UV,
+                CarbonMonoxide = weather.Current.AirQuality!.CO,
+                NitrogenDioxide = weather.Current.AirQuality.NO2,
+                Ozone = weather.Current.AirQuality.O3,
+                SulphurDioxide = weather.Current.AirQuality.SO2,
+                Pm25 = weather.Current.AirQuality.PM2_5,
+                Pm10 = weather.Current.AirQuality.PM10,
+                UsEpaIndex = weather.Current.AirQuality.USEPAIndex,
+                GbDefraIndex = weather.Current.AirQuality.GBDefraIndex
             };
 
             return details;

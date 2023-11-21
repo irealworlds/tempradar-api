@@ -1,6 +1,7 @@
 ﻿using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
+using API.Domain.Dto.WeatherApi;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -10,11 +11,11 @@ public class CurrentWeatherApiService(HttpClient client, IOptions<WeatherApiSett
     AbstractWeatherApiService(options),
     ICurrentWeatherApiService
 {
-    public async Task<CurrentWeatherDto> GetCurrentWeatherAsync(double lat, double lon)
+    public async Task<CurrentWeatherDto> GetCurrentWeatherForLocationAsync(double latitude, double longitude)
     {
         var requestUri = BuildEndpointUri("/current.json", new Dictionary<string, string>
         {
-            { "q", $"{lat},{lon}" },
+            { "q", $"{latitude},{longitude}" },
             { "aqi", "yes" }
         });
         var response = await client.GetAsync(requestUri);

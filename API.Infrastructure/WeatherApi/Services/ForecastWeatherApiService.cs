@@ -1,6 +1,7 @@
 ﻿using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
+using API.Domain.Dto.WeatherApi;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -10,7 +11,7 @@ public class ForecastWeatherApiService(HttpClient client, IOptions<WeatherApiSet
     AbstractWeatherApiService(options),
     IForecastWeatherApiService
 {
-    public async Task<WeatherForecastDto> GetWeatherForecastAsync(double latitude, double longitude)
+    public async Task<WeatherForecastDto> GetWeatherForecastForLocationAsync(double latitude, double longitude)
     {
         var requestUri = BuildEndpointUri("/forecast.json", new Dictionary<string, string>
         {
