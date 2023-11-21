@@ -5,7 +5,7 @@ namespace API.Application.Services
 {
     public class PinnedCityWeatherService(IPinnedCityService pinnedCityService, ICurrentWeatherApiService currentWeatherApiService) : IPinnedCityWeatherService
     {
-        public async Task<PinnedCityWeatherDetailsDto> GetWeatherDetailsAsync(Guid id)
+        public async Task<PinnedCityWeatherDetailsDto?> GetWeatherDetailsAsync(Guid id)
         {
             var city = await pinnedCityService.GetByIdAsync(id);
 

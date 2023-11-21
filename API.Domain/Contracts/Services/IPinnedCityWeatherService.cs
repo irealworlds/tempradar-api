@@ -4,6 +4,6 @@ namespace API.Domain.Contracts.Services
 {
     public interface IPinnedCityWeatherService
     {
-        Task<PinnedCityWeatherDetailsDto> GetWeatherDetailsAsync(Guid id);
+        Task<PinnedCityWeatherDetailsDto?> GetWeatherDetailsAsync(Guid id);
     }
 }
