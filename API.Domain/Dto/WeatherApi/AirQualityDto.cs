@@ -5,27 +5,27 @@ namespace API.Domain.Dto.WeatherApi
     public class AirQualityDto
     {
         [JsonProperty("co")]
-        public double CO { get; set; }
+        public double CarbonMonoxide { get; set; }
 
         [JsonProperty("no2")]
-        public double NO2 { get; set; }
+        public double NitrogenDioxide { get; set; }
 
         [JsonProperty("o3")]
-        public double O3 { get; set; }
+        public double Ozone { get; set; }
 
         [JsonProperty("so2")]
-        public double SO2 { get; set; }
+        public double SulphurDioxide { get; set; }
 
         [JsonProperty("pm2_5")]
-        public double PM2_5 { get; set; }
+        public double Pm25 { get; set; }
 
         [JsonProperty("pm10")]
-        public double PM10 { get; set; }
+        public double Pm10 { get; set; }
 
         [JsonProperty("us-epa-index")]
-        public int USEPAIndex { get; set; }
+        public int UsEpaIndex { get; set; }
 
         [JsonProperty("gb-defra-index")]
-        public int GBDefraIndex { get; set; }
+        public int GbDefraIndex { get; set; }
     }
 }

@@ -14,13 +14,13 @@ namespace API.Domain.Dto.WeatherApi
         public string? Country { get; set; }
 
         [JsonProperty("lat")]
-        public double Lat { get; set; }
+        public double Latitude { get; set; }
 
         [JsonProperty("lon")]
-        public double Lon { get; set; }
+        public double Longitude { get; set; }
 
         [JsonProperty("tz_id")]
-        public string? TzId { get; set; }
+        public string? TimeZoneId { get; set; }
 
         [JsonProperty("localtime_epoch")]
         public int LocaltimeEpoch { get; set; }

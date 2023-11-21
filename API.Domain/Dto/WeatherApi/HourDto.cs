@@ -11,16 +11,16 @@ namespace API.Domain.Dto.WeatherApi
         public string? Time { get; set; }
 
         [JsonProperty("temp_c")]
-        public double TempC { get; set; }
+        public double TemperatureCelsius { get; set; }
 
         [JsonProperty("temp_f")]
-        public double TempF { get; set; }
+        public double TemperatureFahrenheit { get; set; }
 
         [JsonProperty("is_day")]
         public int IsDay { get; set; }
 
         [JsonProperty("condition")]
-        public ConditionDto? Condition { get; set; }
+        public WeatherConditionDto? Condition { get; set; }
 
         [JsonProperty("wind_mph")]
         public double WindMph { get; set; }
@@ -32,7 +32,7 @@ namespace API.Domain.Dto.WeatherApi
         public int WindDegree { get; set; }
 
         [JsonProperty("wind_dir")]
-        public string? WindDir { get; set; }
+        public string? WindDirection { get; set; }
 
         [JsonProperty("pressure_mb")]
         public double PressureMb { get; set; }
@@ -41,10 +41,10 @@ namespace API.Domain.Dto.WeatherApi
         public double PressureIn { get; set; }
 
         [JsonProperty("precip_mm")]
-        public double PrecipMm { get; set; }
+        public double PrecipitationsMm { get; set; }
 
         [JsonProperty("precip_in")]
-        public double PrecipIn { get; set; }
+        public double PrecipitationsIn { get; set; }
 
         [JsonProperty("humidity")]
         public int Humidity { get; set; }
@@ -53,28 +53,28 @@ namespace API.Domain.Dto.WeatherApi
         public int Cloud { get; set; }
 
         [JsonProperty("feelslike_c")]
-        public double FeelsLikeC { get; set; }
+        public double FeelsLikeCelsius { get; set; }
 
         [JsonProperty("feelslike_f")]
-        public double FeelsLikeF { get; set; }
+        public double FeelsLikeFahrenheit { get; set; }
 
         [JsonProperty("windchill_c")]
-        public double WindChillC { get; set; }
+        public double WindChillCelsius { get; set; }
 
         [JsonProperty("windchill_f")]
-        public double WindChillF { get; set; }
+        public double WindChillFahrenheit { get; set; }
 
         [JsonProperty("heatindex_c")]
-        public double HeatIndexC { get; set; }
+        public double HeatIndexCelsius { get; set; }
 
         [JsonProperty("heatindex_f")]
-        public double HeatIndexF { get; set; }
+        public double HeatIndexFahrenheit { get; set; }
 
         [JsonProperty("dewpoint_c")]
-        public double DewPointC { get; set; }
+        public double DewPointCelsius { get; set; }
 
         [JsonProperty("dewpoint_f")]
-        public double DewPointF { get; set; }
+        public double DewPointFahrenheit { get; set; }
 
         [JsonProperty("will_it_rain")]
         public int WillItRain { get; set; }
@@ -101,7 +101,7 @@ namespace API.Domain.Dto.WeatherApi
         public double GustKph { get; set; }
 
         [JsonProperty("uv")]
-        public double UV { get; set; }
+        public double UltravioletIndex { get; set; }
 
         [JsonProperty("air_quality")]
         public AirQualityDto? AirQuality { get; set; }

@@ -5,6 +5,6 @@ namespace API.Domain.Dto.WeatherApi
     public class ForecastDto
     {
         [JsonProperty("forecastday")]
-        public List<ForecastDayDto>? Forecastday { get; set; }
+        public IEnumerable<DailyForecastDto>? DailyForecasts { get; set; }
     }
 }

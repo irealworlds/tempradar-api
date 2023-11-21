@@ -2,7 +2,7 @@
 
 namespace API.Domain.Dto.WeatherApi
 {
-    public class ConditionDto
+    public class WeatherConditionDto
     {
         [JsonProperty("text")]
         public string? Text { get; set; }
