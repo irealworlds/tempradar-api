@@ -6,6 +6,7 @@ using API.Domain.Entities;
 using API.Domain.Repositories;
 using API.Infrastructure.Database;
 using API.Infrastructure.Repositories;
+using API.Infrastructure.WeatherApi.Services;
 using API.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -14,7 +15,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using API.Infrastructure.WeatherApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +70,7 @@ builder.Services.AddHttpClient();
 builder.Services.Configure<WeatherApiSettings>(builder.Configuration.GetSection("WeatherAPI"));
 builder.Services.AddScoped<IWeatherForecastService, ForecastWeatherApiService>();
 builder.Services.AddScoped<ICurrentWeatherService, CurrentWeatherApiService>();
+builder.Services.AddScoped<IWeatherHistoryService, HistoryWeatherApiService>();
 builder.Services.AddScoped<IPinnedCityService, PinnedCityService>();
 builder.Services.AddScoped<IPinnedCityWeatherService, PinnedCityWeatherService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();

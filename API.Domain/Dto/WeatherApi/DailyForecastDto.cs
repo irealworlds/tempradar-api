@@ -5,7 +5,7 @@ namespace API.Domain.Dto.WeatherApi
     public class DailyForecastDto
     {
         [JsonProperty("date")]
-        public string? Date { get; set; }
+        public DateTime Date { get; set; }
 
         [JsonProperty("date_epoch")]
         public int DateEpoch { get; set; }
