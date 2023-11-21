@@ -9,7 +9,7 @@ namespace API.Infrastructure.WeatherApi.Services;
 
 public class ForecastWeatherApiService(HttpClient client, IOptions<WeatherApiSettings> options) :
     AbstractWeatherApiService(options),
-    IForecastWeatherApiService
+    IWeatherForecastService
 {
     public async Task<WeatherForecastDto> GetWeatherForecastForLocationAsync(double latitude, double longitude)
     {

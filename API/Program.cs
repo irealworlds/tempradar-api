@@ -68,8 +68,8 @@ builder.Services.AddHttpClient();
 
 // Register application services
 builder.Services.Configure<WeatherApiSettings>(builder.Configuration.GetSection("WeatherAPI"));
-builder.Services.AddScoped<IForecastWeatherApiService, ForecastWeatherApiService>();
-builder.Services.AddScoped<ICurrentWeatherApiService, CurrentWeatherApiService>();
+builder.Services.AddScoped<IWeatherForecastService, ForecastWeatherApiService>();
+builder.Services.AddScoped<ICurrentWeatherService, CurrentWeatherApiService>();
 builder.Services.AddScoped<IPinnedCityService, PinnedCityService>();
 builder.Services.AddScoped<IPinnedCityWeatherService, PinnedCityWeatherService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();

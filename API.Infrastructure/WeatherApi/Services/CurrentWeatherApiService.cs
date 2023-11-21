@@ -9,7 +9,7 @@ namespace API.Infrastructure.WeatherApi.Services;
 
 public class CurrentWeatherApiService(HttpClient client, IOptions<WeatherApiSettings> options) :
     AbstractWeatherApiService(options),
-    ICurrentWeatherApiService
+    ICurrentWeatherService
 {
     public async Task<CurrentWeatherDto> GetCurrentWeatherForLocationAsync(double latitude, double longitude)
     {

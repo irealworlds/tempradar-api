@@ -2,7 +2,7 @@
 
 namespace API.Domain.Contracts.Services;
 
-public interface ICurrentWeatherApiService
+public interface ICurrentWeatherService
 {
     public Task<CurrentWeatherDto> GetCurrentWeatherForLocationAsync(double latitude, double longitude);
 }

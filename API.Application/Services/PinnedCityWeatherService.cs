@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace API.Application.Services
 {
-    public class PinnedCityWeatherService(IPinnedCityService pinnedCityService, ICurrentWeatherApiService currentWeatherApiService, IMapper mapper) : IPinnedCityWeatherService
+    public class PinnedCityWeatherService(IPinnedCityService pinnedCityService, ICurrentWeatherService currentWeatherApiService, IMapper mapper) : IPinnedCityWeatherService
     {
         public async Task<PinnedCityWeatherDetailsDto?> GetWeatherDetailsAsync(Guid id)
         {
