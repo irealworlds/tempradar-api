@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using API.Infrastructure.WeatherApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
