@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace API.Domain.Dto
+namespace API.Domain.Dto.WeatherApi
 {
-    public class CurrentDto
+    public class CurrentConditionsDto
     {
         [JsonProperty("last_updated_epoch")]
         public int LastUpdatedEpoch { get; set; }
@@ -11,16 +11,16 @@ namespace API.Domain.Dto
         public string? LastUpdated { get; set; }
 
         [JsonProperty("temp_c")]
-        public double TempC { get; set; }
+        public double TemperatureCelsius { get; set; }
 
         [JsonProperty("temp_f")]
-        public double TempF { get; set; }
+        public double TemperatureFahrenheit { get; set; }
 
         [JsonProperty("is_day")]
         public int IsDay { get; set; }
 
         [JsonProperty("condition")]
-        public ConditionDto? Condition { get; set; }
+        public WeatherConditionDto? Condition { get; set; }
 
         [JsonProperty("wind_mph")]
         public double WindMph { get; set; }
@@ -32,7 +32,7 @@ namespace API.Domain.Dto
         public int WindDegree { get; set; }
 
         [JsonProperty("wind_dir")]
-        public string? WindDir { get; set; }
+        public string? WindDirection { get; set; }
 
         [JsonProperty("pressure_mb")]
         public double PressureMb { get; set; }
@@ -41,10 +41,10 @@ namespace API.Domain.Dto
         public double PressureIn { get; set; }
 
         [JsonProperty("precip_mm")]
-        public double PrecipMm { get; set; }
+        public double PrecipitationsMm { get; set; }
 
         [JsonProperty("precip_in")]
-        public double PrecipIn { get; set; }
+        public double PrecipitationsIn { get; set; }
 
         [JsonProperty("humidity")]
         public int Humidity { get; set; }
@@ -53,19 +53,19 @@ namespace API.Domain.Dto
         public int Cloud { get; set; }
 
         [JsonProperty("feelslike_c")]
-        public double FeelsLikeC { get; set; }
+        public double FeelsLikeCelsius { get; set; }
 
         [JsonProperty("feelslike_f")]
-        public double FeelsLikeF { get; set; }
+        public double FeelsLikeFahrenheit { get; set; }
 
         [JsonProperty("vis_km")]
-        public double VisKm { get; set; }
+        public double VisibilityKm { get; set; }
 
         [JsonProperty("vis_miles")]
-        public double VisMiles { get; set; }
+        public double VisibilityMiles { get; set; }
 
         [JsonProperty("uv")]
-        public double UV { get; set; }
+        public double UltravioletIndex { get; set; }
 
         [JsonProperty("gust_mph")]
         public double GustMph { get; set; }

@@ -8,6 +8,7 @@ namespace API.Domain.Contracts.Configuration
 {
     public class WeatherApiSettings
     {
-        public string? ApiKey { get; set; }
+        public required string BaseUri { get; init; }
+        public required string? ApiKey { get; init; }
     }
 }

@@ -1,50 +1,50 @@
 ﻿using Newtonsoft.Json;
 
-namespace API.Domain.Dto
+namespace API.Domain.Dto.WeatherApi
 {
-    public class DayDto
+    public class DailyConditionsDto
     {
         [JsonProperty("maxtemp_c")]
-        public double MaxTempC { get; set; }
+        public double MaximumTemperatureCelsius { get; set; }
 
         [JsonProperty("maxtemp_f")]
-        public double MaxTempF { get; set; }
+        public double MaximumTemperatureFahrenheit { get; set; }
 
         [JsonProperty("mintemp_c")]
-        public double MinTempC { get; set; }
+        public double MinimumTemperatureCelsius { get; set; }
 
         [JsonProperty("mintemp_f")]
-        public double MinTempF { get; set; }
+        public double MinimumTemperatureFahrenheit { get; set; }
 
         [JsonProperty("avgtemp_c")]
-        public double AvgTempC { get; set; }
+        public double AverageTemperatureCelsius { get; set; }
 
         [JsonProperty("avgtemp_f")]
-        public double AvgTempF { get; set; }
+        public double AverageTemperatureFahrenheit { get; set; }
 
         [JsonProperty("maxwind_mph")]
-        public double MaxWindMph { get; set; }
+        public double MaximumWindMph { get; set; }
 
         [JsonProperty("maxwind_kph")]
-        public double MaxWindKph { get; set; }
+        public double MaximumWindKph { get; set; }
 
         [JsonProperty("totalprecip_mm")]
-        public double TotalPrecipMm { get; set; }
+        public double TotalPrecipitationsMm { get; set; }
 
         [JsonProperty("totalprecip_in")]
-        public double TotalPrecipIn { get; set; }
+        public double TotalPrecipitationsIn { get; set; }
 
         [JsonProperty("totalsnow_cm")]
         public double TotalSnowCm { get; set; }
 
         [JsonProperty("avgvis_km")]
-        public double AvgVisibilityKm { get; set; }
+        public double AverageVisibilityKm { get; set; }
 
         [JsonProperty("avgvis_miles")]
-        public double AvgVisibilityMiles { get; set; }
+        public double AverageVisibilityMiles { get; set; }
 
         [JsonProperty("avghumidity")]
-        public double AvgHumidity { get; set; }
+        public double AverageHumidity { get; set; }
 
         [JsonProperty("daily_will_it_rain")]
         public int WillItRain { get; set; }
@@ -59,10 +59,10 @@ namespace API.Domain.Dto
         public int ChanceOfSnow { get; set; }
 
         [JsonProperty("condition")]
-        public ConditionDto? Condition { get; set; }
+        public WeatherConditionDto? Condition { get; set; }
 
         [JsonProperty("uv")]
-        public double UV { get; set; }
+        public double UltravioletIndex { get; set; }
 
         [JsonProperty("air_quality")]
         public AirQualityDto? AirQuality { get; set; }

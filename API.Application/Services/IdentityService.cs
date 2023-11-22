@@ -3,25 +3,16 @@ using System.Security.Claims;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
 using API.Domain.Entities;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 
 namespace API.Application.Services;
 
-public class IdentityService(UserManager<ApplicationUser> userManager, IUserStore<ApplicationUser> userStore) : IIdentityService
+public class IdentityService(UserManager<ApplicationUser> userManager, IUserStore<ApplicationUser> userStore, IMapper mapper) : IIdentityService
 {
     // Validate the email address using DataAnnotations like the UserValidator does when RequireUniqueEmail = true.
     private static readonly EmailAddressAttribute EmailAddressAttribute = new();
 
-    private static IdentityDto MapUserToDto(ApplicationUser user)
-    {
-        return new IdentityDto()
-        {
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email ?? String.Empty
-        };
-    }
-    
     public async Task<IdentityDto?> GetIdentityByClaimsPrincipal(ClaimsPrincipal principal)
     {
         var user = await userManager.GetUserAsync(principal);
@@ -31,7 +22,7 @@ public class IdentityService(UserManager<ApplicationUser> userManager, IUserStor
             return null;
         }
 
-        return MapUserToDto(user);
+        return mapper.Map<IdentityDto>(user);
     }
 
     public async Task<IdentityDto> CreateIdentity(IdentityCreationDataDto data)
@@ -64,6 +55,6 @@ public class IdentityService(UserManager<ApplicationUser> userManager, IUserStor
         // TODO
         // await SendConfirmationEmailAsync(user, userManager, context, email);
 
-        return MapUserToDto(user);
+        return mapper.Map<IdentityDto>(user);
     }
 }
