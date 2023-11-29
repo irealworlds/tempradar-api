@@ -84,7 +84,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPinnedCityRepository, PinnedCityRepository>();
 
 // Register authorization handlers
-builder.Services.AddSingleton<IAuthorizationHandler, PinnedCityCrudHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, PinnedCityCrudHandler>();
 
 var app = builder.Build();
 
