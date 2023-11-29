@@ -1,3 +1,4 @@
+using System.Net;
 using API.Application.Contracts;
 using API.Application.Services;
 using API.Domain.Contracts.Configuration;
@@ -8,6 +9,7 @@ using API.Infrastructure.Database;
 using API.Infrastructure.Repositories;
 using API.Infrastructure.WeatherApi.Services;
 using API.Services;
+using API.Authorization.Handlers;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
@@ -15,7 +17,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using API.Authorization.Handlers;
 using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,9 +32,14 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
         {
             OnRedirectToLogin = ctx =>
             {
-                ctx.Response.StatusCode = 401;
+                ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                 return Task.CompletedTask;
-            }
+            },
+            OnRedirectToAccessDenied = ctx =>
+            {
+                ctx.Response.StatusCode = (int) HttpStatusCode.Forbidden;
+                return Task.CompletedTask;
+            },
         };
     });
 builder.Services.AddAuthorizationBuilder();
@@ -68,9 +74,11 @@ builder.Services.AddAutoMapper(
 // Enable the HTTP Client
 builder.Services.AddHttpClient();
 
-// Register application services
+// Register configuration
 builder.Services.Configure<WeatherApiSettings>(builder.Configuration.GetSection("WeatherAPI"));
 builder.Services.Configure<SensorApiSettings>(builder.Configuration.GetSection("SensorAPI"));
+
+// Register application services
 builder.Services.AddScoped<IWeatherForecastService, ForecastWeatherApiService>();
 builder.Services.AddScoped<ICurrentWeatherService, CurrentWeatherApiService>();
 builder.Services.AddScoped<IWeatherHistoryService, HistoryWeatherApiService>();
