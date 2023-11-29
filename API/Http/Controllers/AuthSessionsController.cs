@@ -22,11 +22,11 @@ namespace API.Http.Controllers
             return new CreatedResult();
         }
         
+        [Authorize]
         [HttpDelete("Current")]
         [Produces("application/json")]
         [ProducesResponseType((int) HttpStatusCode.NoContent)]
         [ProducesResponseType((int) HttpStatusCode.Unauthorized)]
-        [Authorize]
         public async Task<IActionResult> DeleteCurrentAsync()
         {
             await authSessionService.InvalidateCurrentSession();
