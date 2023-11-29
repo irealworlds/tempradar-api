@@ -1,7 +1,6 @@
-﻿namespace API.Domain.Contracts.Configuration
+﻿namespace API.Domain.Contracts.Configuration;
+
+public class SensorApiSettings
 {
-    public class SensorApiSettings
-    {
-        public required string? ApiKey { get; init; }
-    }
+    public required string? ApiKey { get; init; }
 }

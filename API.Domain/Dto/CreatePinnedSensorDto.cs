@@ -1,8 +1,7 @@
-﻿namespace API.Domain.Dto
+﻿namespace API.Domain.Dto;
+
+public class CreatePinnedSensorDto
 {
-    public class CreatePinnedSensorDto
-    {
-        public string Name { get; set; }
-        public string SensorId { get; set; }
-    }
+    public string Name { get; set; }
+    public string SensorId { get; set; }
 }

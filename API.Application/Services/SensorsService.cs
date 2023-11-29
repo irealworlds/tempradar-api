@@ -1,113 +1,88 @@
-﻿using API.Domain.Contracts.Configuration;
+﻿using System.Text.Json;
+using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
 using Microsoft.Extensions.Options;
-using System.Text.Json;
 
-namespace API.Application.Services
+namespace API.Application.Services;
+
+public class SensorsService : ISensorsService
 {
-    public class SensorsService : ISensorsService
+    private readonly SensorApiSettings _sensorsApiSettings;
+    private readonly string baseUri;
+    private readonly HttpClient client;
+
+    public SensorsService(HttpClient client, IOptions<SensorApiSettings> options)
     {
-        private readonly HttpClient client;
-        private readonly SensorApiSettings _sensorsApiSettings;
-        private readonly string baseUri;
+        this.client = client;
+        this._sensorsApiSettings = options.Value;
+        this.baseUri = "http://sensor.irealworlds.com";
 
-        public SensorsService(HttpClient client, IOptions<SensorApiSettings> options)
+        client.DefaultRequestHeaders.Add("x-api-key", this._sensorsApiSettings.ApiKey);
+    }
+
+    public async Task<IEnumerable<SensorDto>> GetSensorsAsync(int? skip = null, int? limit = null)
+    {
+        var requestUri = this.BuildEndpointUri("/sensors", skip, limit);
+
+        var response = await this.client.GetAsync(requestUri);
+
+        if (!response.IsSuccessStatusCode)
+            throw new HttpRequestException(
+                $"Failed to retrieve sensors data. Status code: {response.StatusCode}"
+            );
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        var options = new JsonSerializerOptions
         {
-            this.client = client;
-            _sensorsApiSettings = options.Value;
-            baseUri = "http://sensor.irealworlds.com";
+            PropertyNameCaseInsensitive = true
+        };
+        var sensorApiResponse = JsonSerializer.Deserialize<SensorApiResponseDto>(content, options);
+        if (sensorApiResponse == null) throw new Exception("Could not parse data returned from SensorsApi.");
 
-            client.DefaultRequestHeaders.Add("x-api-key", _sensorsApiSettings.ApiKey);
-        }
+        var sensors = sensorApiResponse.Items;
+        if (sensors == null) throw new Exception("Could not parse data returned from SensorsApi.");
 
-        public async Task<IEnumerable<SensorDto>> GetSensorsAsync(int? skip = null, int? limit = null)
+        return sensors;
+    }
+
+    public async Task<IEnumerable<SensorReadingDto>> GetSensorReadingsAsync(string resourceIdentifier, int? skip = null,
+        int? limit = null)
+    {
+        var requestUri = this.BuildEndpointUri($"/sensors/{resourceIdentifier}/readings", skip, limit);
+
+        var response = await this.client.GetAsync(requestUri);
+
+        if (!response.IsSuccessStatusCode)
+            throw new HttpRequestException(
+                $"Failed to retrieve sensors data. Status code: {response.StatusCode}"
+            );
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        var options = new JsonSerializerOptions
         {
-            var requestUri = BuildEndpointUri("/sensors", skip, limit);
+            PropertyNameCaseInsensitive = true
+        };
+        var sensorApiResponse = JsonSerializer.Deserialize<SensorReadingApiResponseDto>(content, options);
+        if (sensorApiResponse == null) throw new Exception("Could not parse data returned from SensorsApi.");
 
-            var response = await client.GetAsync(requestUri);
+        var sensorReadings = sensorApiResponse.Items;
+        if (sensorReadings == null) throw new Exception("Could not parse data returned from SensorsApi.");
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new HttpRequestException(
-                    $"Failed to retrieve sensors data. Status code: {response.StatusCode}"
-                );
-            }
+        return sensorReadings;
+    }
 
-            var content = await response.Content.ReadAsStringAsync();
+    protected string BuildEndpointUri(string endpoint, int? skip = null, int? limit = null)
+    {
+        var uriBuilder = new UriBuilder(new Uri(new Uri(this.baseUri), endpoint));
+        var queryParameters = new List<string>();
 
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var sensorApiResponse = JsonSerializer.Deserialize<SensorApiResponseDto>(content, options);
-            if (sensorApiResponse == null)
-            {
-                throw new Exception("Could not parse data returned from SensorsApi.");
-            }
+        if (skip != null) queryParameters.Add($"skip={skip}");
+        if (limit != null) queryParameters.Add($"limit={limit}");
+        if (queryParameters.Count > 0) uriBuilder.Query = string.Join("&", queryParameters);
 
-            var sensors = sensorApiResponse.Items;
-            if (sensors == null)
-            {
-                throw new Exception("Could not parse data returned from SensorsApi.");
-            }
-
-            return sensors;
-        }
-
-        public async Task<IEnumerable<SensorReadingDto>> GetSensorReadingsAsync(string resourceIdentifier, int? skip = null, int? limit = null)
-        {
-            var requestUri = BuildEndpointUri($"/sensors/{resourceIdentifier}/readings", skip, limit);
-
-            var response = await client.GetAsync(requestUri);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new HttpRequestException(
-                    $"Failed to retrieve sensors data. Status code: {response.StatusCode}"
-                );
-            }
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var sensorApiResponse = JsonSerializer.Deserialize<SensorReadingApiResponseDto>(content, options);
-            if (sensorApiResponse == null)
-            {
-                throw new Exception("Could not parse data returned from SensorsApi.");
-            }
-
-            var sensorReadings = sensorApiResponse.Items;
-            if (sensorReadings == null)
-            {
-                throw new Exception("Could not parse data returned from SensorsApi.");
-            }
-
-            return sensorReadings;
-        }
-
-        protected string BuildEndpointUri(string endpoint, int? skip = null, int? limit = null)
-        {
-            var uriBuilder = new UriBuilder(new Uri(new Uri(baseUri), endpoint));
-            var queryParameters = new List<string>();
-
-            if (skip != null)
-            {
-                queryParameters.Add($"skip={skip}");
-            }
-            if (limit != null)
-            {
-                queryParameters.Add($"limit={limit}");
-            }
-            if (queryParameters.Count > 0)
-            {
-                uriBuilder.Query = string.Join("&", queryParameters);
-            }
-
-            return uriBuilder.Uri.ToString();
-        }
+        return uriBuilder.Uri.ToString();
     }
 }

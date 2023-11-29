@@ -1,7 +1,6 @@
-﻿namespace API.Domain.Dto
+﻿namespace API.Domain.Dto;
+
+public class SensorReadingApiResponseDto
 {
-    public class SensorReadingApiResponseDto
-    {
-        public IEnumerable<SensorReadingDto>? Items { get; set; }
-    }
+    public IEnumerable<SensorReadingDto>? Items { get; set; }
 }

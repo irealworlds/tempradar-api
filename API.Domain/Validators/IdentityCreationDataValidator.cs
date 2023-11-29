@@ -7,20 +7,20 @@ public class IdentityCreationDataValidator : AbstractValidator<IdentityCreationD
 {
     public IdentityCreationDataValidator()
     {
-        RuleFor(x => x.FirstName)
+        this.RuleFor(x => x.FirstName)
             .NotNull()
             .NotEmpty()
             .MaximumLength(64);
-        RuleFor(x => x.LastName)
+        this.RuleFor(x => x.LastName)
             .NotNull()
             .NotEmpty()
             .MaximumLength(64);
-        RuleFor(x => x.Password)
+        this.RuleFor(x => x.Password)
             .NotNull()
             .NotEmpty()
             .MinimumLength(8)
             .MaximumLength(128);
-        RuleFor(x => x.Email)
+        this.RuleFor(x => x.Email)
             .NotNull()
             .NotEmpty()
             .MaximumLength(256)

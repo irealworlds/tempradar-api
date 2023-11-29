@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace API.Domain.Dto
+namespace API.Domain.Dto;
+
+public class SensorApiResponseDto
 {
-    public class SensorApiResponseDto
-    {
-        [JsonProperty("items")]
-        public IEnumerable<SensorDto>? Items { get; set; }
-    }
+    [JsonProperty("items")] public IEnumerable<SensorDto>? Items { get; set; }
 }

@@ -1,6 +1,8 @@
 using System.Net;
+using System.Reflection;
 using API.Application.Contracts;
 using API.Application.Services;
+using API.Authorization.Handlers;
 using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
 using API.Domain.Entities;
@@ -9,15 +11,13 @@ using API.Infrastructure.Database;
 using API.Infrastructure.Repositories;
 using API.Infrastructure.WeatherApi.Services;
 using API.Services;
-using API.Authorization.Handlers;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,18 +28,18 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
     .AddIdentityCookies()
     .ApplicationCookie!.Configure(opt =>
     {
-        opt.Events = new CookieAuthenticationEvents()
+        opt.Events = new CookieAuthenticationEvents
         {
             OnRedirectToLogin = ctx =>
             {
-                ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return Task.CompletedTask;
             },
             OnRedirectToAccessDenied = ctx =>
             {
-                ctx.Response.StatusCode = (int) HttpStatusCode.Forbidden;
+                ctx.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 return Task.CompletedTask;
-            },
+            }
         };
     });
 builder.Services.AddAuthorizationBuilder();

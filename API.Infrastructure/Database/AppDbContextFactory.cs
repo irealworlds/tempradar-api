@@ -12,11 +12,10 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
             .AddUserSecrets<AppDbContextFactory>()
             .Build();
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        
-        var connectionString = configuration["ConnectionString"]; 
+
+        var connectionString = configuration["ConnectionString"];
         optionsBuilder.UseSqlServer(connectionString);
-        
+
         return new AppDbContext(optionsBuilder.Options);
     }
-    
 }

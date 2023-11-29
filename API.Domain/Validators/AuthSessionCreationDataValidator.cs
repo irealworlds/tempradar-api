@@ -7,17 +7,17 @@ public class AuthSessionCreationDataValidator : AbstractValidator<AuthSessionCre
 {
     public AuthSessionCreationDataValidator()
     {
-        RuleFor(x => x.Email)
+        this.RuleFor(x => x.Email)
             .NotNull()
             .NotEmpty()
             .MaximumLength(256)
             .EmailAddress();
-        RuleFor(x => x.Password)
+        this.RuleFor(x => x.Password)
             .NotNull()
             .NotEmpty()
             .MinimumLength(8)
             .MaximumLength(128);
-        RuleFor(x => x.TwoFactorCode);
-        RuleFor(x => x.TwoFactorRecoveryCode);
+        this.RuleFor(x => x.TwoFactorCode);
+        this.RuleFor(x => x.TwoFactorRecoveryCode);
     }
 }

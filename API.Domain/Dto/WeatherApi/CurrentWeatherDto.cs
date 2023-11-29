@@ -1,13 +1,10 @@
 ﻿using Newtonsoft.Json;
 
-namespace API.Domain.Dto.WeatherApi
-{
-    public class CurrentWeatherDto
-    {
-        [JsonProperty("location")]
-        public LocationDto? Location { get; set; }
+namespace API.Domain.Dto.WeatherApi;
 
-        [JsonProperty("current")]
-        public CurrentConditionsDto? Current { get; set; }
-    }
+public class CurrentWeatherDto
+{
+    [JsonProperty("location")] public LocationDto? Location { get; set; }
+
+    [JsonProperty("current")] public CurrentConditionsDto? Current { get; set; }
 }
