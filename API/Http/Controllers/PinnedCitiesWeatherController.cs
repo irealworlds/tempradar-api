@@ -3,27 +3,52 @@ using API.Domain.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using API.Authorization.Requirements;
 
 namespace API.Http.Controllers
 {
     [ApiController]
-    public class PinnedCitiesWeatherController(IPinnedCityWeatherService pinnedCityWeatherService) : ControllerBase
+    [Route("PinnedCities/{cityId:guid}/Weather")]
+    public class PinnedCitiesWeatherController(IPinnedCityService pinnedCityService, IPinnedCityWeatherService pinnedCityWeatherService, IAuthorizationService authorizationService) : ControllerBase
     {
-        [HttpGet("PinnedCities/{id:guid}/Weather")]
+        [HttpGet]
         [Authorize]
         [Produces("application/json")]
         [ProducesResponseType(typeof(IEnumerable<PinnedCityWeatherDetailsDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> GetPinnedCityWeatherDetails(Guid id)
+        public async Task<IActionResult> GetPinnedCityWeatherDetails(Guid cityId)
         {
+            // Fetch the city details
+            var city = await pinnedCityService.GetByIdAsync(cityId);
+
+            // Make sure a city with that ID actually exists
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            // Perform authorization
+            var authorizationResult = await authorizationService.AuthorizeAsync(HttpContext.User, city, Operations.Read);
+
+            if (!authorizationResult.Succeeded)
+            {
+                if (User.Identity is { IsAuthenticated: true })
+                {
+                    return new ForbidResult();
+                }
+
+                return new ChallengeResult();
+            }
+            
+            // Get the temperature
             try
             {
-                if (id == Guid.Empty)
+                if (cityId == Guid.Empty)
                 {
                     return BadRequest("Invalid id parameter");
                 }
 
-                var pinnedCityWeatherDetails = await pinnedCityWeatherService.GetWeatherDetailsAsync(id);
+                var pinnedCityWeatherDetails = await pinnedCityWeatherService.GetWeatherDetailsAsync(cityId);
 
                 if (pinnedCityWeatherDetails == null)
                 {
@@ -34,25 +59,48 @@ namespace API.Http.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while getting the pinned city weather details: " + ex.Message);
+                return StatusCode((int) HttpStatusCode.InternalServerError, "An error occurred while getting the pinned city weather details: " + ex.Message);
             }
         }
 
-        [HttpGet("PinnedCities/{id:guid}/Weather/History")]
+        [HttpGet("History")]
         [Authorize]
         [Produces("application/json")]
         [ProducesResponseType(typeof(IEnumerable<PinnedCityWeatherDetailsDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        public async Task<IActionResult> GetPinnedCityWeatherHistory(Guid id)
+        public async Task<IActionResult> GetPinnedCityWeatherHistory(Guid cityId)
         {
+            // Fetch the city details
+            var city = await pinnedCityService.GetByIdAsync(cityId);
+
+            // Make sure a city with that ID actually exists
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            // Perform authorization
+            var authorizationResult = await authorizationService.AuthorizeAsync(HttpContext.User, city, Operations.Read);
+
+            if (!authorizationResult.Succeeded)
+            {
+                if (User.Identity is { IsAuthenticated: true })
+                {
+                    return new ForbidResult();
+                }
+
+                return new ChallengeResult();
+            }
+            
+            // Get the temperature history
             try
             {
-                if (id == Guid.Empty)
+                if (cityId == Guid.Empty)
                 {
                     return BadRequest("Invalid id parameter");
                 }
 
-                var pinnedCityDailyTemperatures = await pinnedCityWeatherService.GetWeatherHistoryAsync(id);
+                var pinnedCityDailyTemperatures = await pinnedCityWeatherService.GetWeatherHistoryAsync(cityId);
 
                 if (pinnedCityDailyTemperatures == null)
                 {
@@ -63,7 +111,7 @@ namespace API.Http.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while getting the pinned city weather history: " + ex.Message);
+                return StatusCode((int) HttpStatusCode.InternalServerError, "An error occurred while getting the pinned city weather history: " + ex.Message);
             }
         }
     }

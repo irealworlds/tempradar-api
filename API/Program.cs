@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using API.Authorization.Handlers;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +82,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 // Register repositories
 builder.Services.AddScoped<IPinnedCityRepository, PinnedCityRepository>();
+
+// Register authorization handlers
+builder.Services.AddSingleton<IAuthorizationHandler, PinnedCityCrudHandler>();
 
 var app = builder.Build();
 

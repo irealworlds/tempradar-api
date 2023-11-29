@@ -3,14 +3,16 @@ using API.Domain.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using API.Authorization.Requirements;
 
 namespace API.Http.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PinnedCitiesController(IPinnedCityService pinnedCityService) : ControllerBase
+public class PinnedCitiesController(IPinnedCityService pinnedCityService, IAuthorizationService authorizationService) : ControllerBase
 {
     [HttpGet]
+    [Authorize]
     [Produces("application/json")]
     [ProducesResponseType(typeof(IEnumerable<PinnedCityDto>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
@@ -21,6 +23,7 @@ public class PinnedCitiesController(IPinnedCityService pinnedCityService) : Cont
     }
 
     [HttpGet("Paginated")]
+    [Authorize]
     [Produces("application/json")]
     [ProducesResponseType(typeof(PaginatedResultDto<PinnedCityDto>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
@@ -51,14 +54,31 @@ public class PinnedCitiesController(IPinnedCityService pinnedCityService) : Cont
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> ShowAsync(Guid id)
     {
+        // Fetch the city details
         var city = await pinnedCityService.GetByIdAsync(id);
 
+        // Make sure a city with that ID actually exists
         if (city == null)
         {
             return NotFound();
         }
 
-        return CreatedAtAction(nameof(CreateAsync), city);
+        // Perform authorization
+        var authorizationResult = await authorizationService.AuthorizeAsync(HttpContext.User, city, Operations.Read);
+
+
+        if (!authorizationResult.Succeeded)
+        {
+            if (User.Identity is { IsAuthenticated: true })
+            {
+                return new ForbidResult();
+            }
+
+            return new ChallengeResult();
+        }
+
+        // Return the city data
+        return Ok(city);
     }
 
     [HttpPut("{id:guid}")]
@@ -68,18 +88,31 @@ public class PinnedCitiesController(IPinnedCityService pinnedCityService) : Cont
     {
         try
         {
-            var updatedCity = await pinnedCityService.UpdatePinnedCityAsync(id, pinnedCityDto);
+            // Fetch the city details
+            var city = await pinnedCityService.GetByIdAsync(id);
 
-            return Ok(updatedCity);
-        }
-        catch (ArgumentException exception)
-        {
-            if (exception.ParamName is nameof(id))
+            // Make sure a city with that ID actually exists
+            if (city == null)
             {
                 return NotFound();
             }
 
-            throw;
+            // Perform authorization
+            var authorizationResult = await authorizationService.AuthorizeAsync(HttpContext.User, city, Operations.Update);
+
+            if (!authorizationResult.Succeeded)
+            {
+                if (User.Identity is { IsAuthenticated: true })
+                {
+                    return new ForbidResult();
+                }
+
+                return new ChallengeResult();
+            }
+            
+            var updatedCity = await pinnedCityService.UpdatePinnedCityAsync(city, pinnedCityDto);
+
+            return Ok(updatedCity);
         }
         catch (Exception ex)
         {
@@ -92,9 +125,32 @@ public class PinnedCitiesController(IPinnedCityService pinnedCityService) : Cont
     [ActionName(nameof(DeleteAsync))]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
+        // Fetch the city details
+        var city = await pinnedCityService.GetByIdAsync(id);
+
+        // Make sure a city with that ID actually exists
+        if (city == null)
+        {
+            return NotFound();
+        }
+
+        // Perform authorization
+        var authorizationResult = await authorizationService.AuthorizeAsync(HttpContext.User, city, Operations.Delete);
+
+        if (!authorizationResult.Succeeded)
+        {
+            if (User.Identity is { IsAuthenticated: true })
+            {
+                return new ForbidResult();
+            }
+
+            return new ChallengeResult();
+        }
+        
+        // Delete the city
         try
         {
-            await pinnedCityService.DeletePinnedCityByIdAsync(id);
+            await pinnedCityService.DeletePinnedCityAsync(id);
 
             return NoContent();
         }
@@ -109,7 +165,10 @@ public class PinnedCitiesController(IPinnedCityService pinnedCityService) : Cont
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "An error occurred while deleting the pinned city: " + ex.Message);
+            return StatusCode(
+                (int) HttpStatusCode.InternalServerError,
+                $"An error occurred while deleting the pinned city: {ex.Message}"
+            );
         }
     }
 }

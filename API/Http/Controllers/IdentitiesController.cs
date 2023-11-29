@@ -30,16 +30,16 @@ public class IdentitiesController(IIdentityService identityService) : Controller
         }
         
         // Return a 201 Created response
-        return CreatedAtAction(nameof(ShowAsync), user);
+        return CreatedAtAction(nameof(ShowCurrentAsync), user);
     }
     
     [Authorize]
     [HttpGet("Current")]
-    [ActionName(nameof(ShowAsync))]
+    [ActionName(nameof(ShowCurrentAsync))]
     [Produces("application/json")]
     [ProducesResponseType((int) HttpStatusCode.Unauthorized)]
     [ProducesResponseType(typeof(IdentityDto), (int) HttpStatusCode.OK)]
-    public async Task<IActionResult> ShowAsync()
+    public async Task<IActionResult> ShowCurrentAsync()
     {
         var identity = await identityService.GetIdentityByClaimsPrincipal(HttpContext.User);
 
