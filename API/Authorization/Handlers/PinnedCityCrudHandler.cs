@@ -18,9 +18,23 @@ public class PinnedCityCrudHandler(IPinnedCityService pinnedCityService) : Autho
                 context.Succeed(requirement);
             }
         }
+        else if (requirement.Name == Operations.Update.Name)
+        {
+            if (await pinnedCityService.UserCanUpdateCityAsync(context.User, resource))
+            {
+                context.Succeed(requirement);
+            }
+        }
+        else if (requirement.Name == Operations.Delete.Name)
+        {
+            if (await pinnedCityService.UserCanDeleteCityAsync(context.User, resource))
+            {
+                context.Succeed(requirement);
+            }
+        }
         else
         {
-            context.Fail(new AuthorizationFailureReason(this, $"Operation {requirement.Name} not handled for resource of type {nameof(PinnedCity)}.")); 
+            context.Fail(new AuthorizationFailureReason(this, $"Operation {requirement.Name} not handled for resource of type {nameof(PinnedCity)}."));
         }
     }
 }

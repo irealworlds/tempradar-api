@@ -151,5 +151,56 @@ namespace API.Application.Services
             await repository.DeleteAsync(pinnedSensorToDelete);
             await repository.SaveChangesAsync();
         }
+
+        public async Task<bool> UserCanReadSensorAsync(ClaimsPrincipal principal, PinnedSensor resource)
+        {
+            var user = await userService.GetUserAsync(principal);
+
+            if (user == null)
+            {
+                throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
+            }
+
+            return await UserCanReadSensorAsync(user, resource);
+        }
+
+        public Task<bool> UserCanReadSensorAsync(ApplicationUser user, PinnedSensor resource)
+        {
+            return Task.FromResult(resource.UserId.Equals(user.Id));
+        }
+
+        public async Task<bool> UserCanUpdateSensorAsync(ClaimsPrincipal principal, PinnedSensor resource)
+        {
+            var user = await userService.GetUserAsync(principal);
+
+            if (user == null)
+            {
+                throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
+            }
+
+            return await UserCanUpdateSensorAsync(user, resource);
+        }
+
+        public Task<bool> UserCanUpdateSensorAsync(ApplicationUser user, PinnedSensor resource)
+        {
+            return Task.FromResult(resource.UserId.Equals(user.Id));
+        }
+
+        public async Task<bool> UserCanDeleteSensorAsync(ClaimsPrincipal principal, PinnedSensor resource)
+        {
+            var user = await userService.GetUserAsync(principal);
+
+            if (user == null)
+            {
+                throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
+            }
+
+            return await UserCanDeleteSensorAsync(user, resource);
+        }
+
+        public Task<bool> UserCanDeleteSensorAsync(ApplicationUser user, PinnedSensor resource)
+        {
+            return Task.FromResult(resource.UserId.Equals(user.Id));
+        }
     }
 }
