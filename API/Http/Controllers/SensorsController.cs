@@ -2,26 +2,26 @@
 using System.Net;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
+using API.Domain.Dto.SensorApi;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Http.Controllers;
 
 [ApiController]
+[Route("[controller]")]
 public class SensorsController(ISensorsService sensorsService) : ControllerBase
 {
-    [HttpGet("Sensors")]
+    [HttpGet]
     [Authorize]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(IEnumerable<SensorDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(PaginatedResultDto<SensorDto>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-    public async Task<IActionResult> GetSensors([FromQuery] int? skip = null, [FromQuery] int? limit = null)
+    public async Task<IActionResult> GetSensors([FromQuery] PaginationOptionsDto pagination)
     {
         try
         {
-            var sensors = await sensorsService.GetSensorsAsync(skip, limit);
-
-            if (sensors == null) return this.NotFound();
+            var sensors = await sensorsService.GetSensorsAsync(pagination.Skip, pagination.Limit);
 
             return this.Ok(sensors);
         }
@@ -31,21 +31,16 @@ public class SensorsController(ISensorsService sensorsService) : ControllerBase
         }
     }
 
-    [HttpGet("SensorReadings")]
     [Authorize]
+    [HttpGet("{sensorId:required}/Readings")]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(IEnumerable<SensorReadingDto>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(PaginatedResultDto<SensorReadingDto>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-    public async Task<IActionResult> GetSensorReadings([FromQuery] [Required] string resourceIdentifier,
-        [FromQuery] int? skip = null, [FromQuery] int? limit = null)
+    public async Task<IActionResult> GetSensorReadings(string sensorId, [FromQuery] PaginationOptionsDto pagination)
     {
         try
         {
-            if (resourceIdentifier == null) return this.BadRequest("Invalid resourceIdentifier parameter");
-
-            var sensorReadings = await sensorsService.GetSensorReadingsAsync(resourceIdentifier, skip, limit);
-
-            if (sensorReadings == null) return this.NotFound();
+            var sensorReadings = await sensorsService.GetSensorReadingsAsync(sensorId, pagination.Skip, pagination.Limit);
 
             return this.Ok(sensorReadings);
         }

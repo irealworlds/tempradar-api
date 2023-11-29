@@ -9,6 +9,7 @@ using API.Domain.Entities;
 using API.Domain.Repositories;
 using API.Infrastructure.Database;
 using API.Infrastructure.Repositories;
+using API.Infrastructure.SensorApi.Services;
 using API.Infrastructure.WeatherApi.Services;
 using API.Services;
 using FluentValidation;

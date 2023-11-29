@@ -2,57 +2,59 @@
 using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
+using API.Domain.Dto.SensorApi;
 using Microsoft.Extensions.Options;
 
-namespace API.Application.Services;
+namespace API.Infrastructure.SensorApi.Services;
 
 public class SensorsService : ISensorsService
 {
-    private readonly SensorApiSettings _sensorsApiSettings;
-    private readonly string baseUri;
-    private readonly HttpClient client;
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+    
+    private readonly string _baseUri;
+    private readonly HttpClient _client;
 
     public SensorsService(HttpClient client, IOptions<SensorApiSettings> options)
     {
-        this.client = client;
-        this._sensorsApiSettings = options.Value;
-        this.baseUri = "http://sensor.irealworlds.com";
-
-        client.DefaultRequestHeaders.Add("x-api-key", this._sensorsApiSettings.ApiKey);
+        this._baseUri = options.Value.BaseUri;
+        this._client = client;
+        this._client.DefaultRequestHeaders.Add("x-api-key", options.Value.ApiKey);
     }
 
-    public async Task<IEnumerable<SensorDto>> GetSensorsAsync(int? skip = null, int? limit = null)
+    public async Task<PaginatedResultDto<SensorDto>> GetSensorsAsync(int? skip = null, int? limit = null)
     {
         var requestUri = this.BuildEndpointUri("/sensors", skip, limit);
 
-        var response = await this.client.GetAsync(requestUri);
+        var response = await this._client.GetAsync(requestUri);
 
         if (!response.IsSuccessStatusCode)
+        {
             throw new HttpRequestException(
                 $"Failed to retrieve sensors data. Status code: {response.StatusCode}"
             );
+        }
 
         var content = await response.Content.ReadAsStringAsync();
 
-        var options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-        var sensorApiResponse = JsonSerializer.Deserialize<SensorApiResponseDto>(content, options);
+        var sensorApiResponse = JsonSerializer.Deserialize<SensorApiPaginatedResponseDto<SensorDto>>(content, SensorsService.JsonOptions);
         if (sensorApiResponse == null) throw new Exception("Could not parse data returned from SensorsApi.");
 
-        var sensors = sensorApiResponse.Items;
-        if (sensors == null) throw new Exception("Could not parse data returned from SensorsApi.");
-
-        return sensors;
+        return new PaginatedResultDto<SensorDto>
+        {
+            Items = sensorApiResponse.Items ?? throw new InvalidOperationException(),
+            Total = sensorApiResponse.Metadata.Total,
+        };
     }
 
-    public async Task<IEnumerable<SensorReadingDto>> GetSensorReadingsAsync(string resourceIdentifier, int? skip = null,
+    public async Task<PaginatedResultDto<SensorReadingDto>> GetSensorReadingsAsync(string resourceIdentifier, int? skip = null,
         int? limit = null)
     {
         var requestUri = this.BuildEndpointUri($"/sensors/{resourceIdentifier}/readings", skip, limit);
 
-        var response = await this.client.GetAsync(requestUri);
+        var response = await this._client.GetAsync(requestUri);
 
         if (!response.IsSuccessStatusCode)
             throw new HttpRequestException(
@@ -65,18 +67,19 @@ public class SensorsService : ISensorsService
         {
             PropertyNameCaseInsensitive = true
         };
-        var sensorApiResponse = JsonSerializer.Deserialize<SensorReadingApiResponseDto>(content, options);
+        var sensorApiResponse = JsonSerializer.Deserialize<SensorApiPaginatedResponseDto<SensorReadingDto>>(content, options);
         if (sensorApiResponse == null) throw new Exception("Could not parse data returned from SensorsApi.");
 
-        var sensorReadings = sensorApiResponse.Items;
-        if (sensorReadings == null) throw new Exception("Could not parse data returned from SensorsApi.");
-
-        return sensorReadings;
+        return new PaginatedResultDto<SensorReadingDto>
+        {
+            Items = sensorApiResponse.Items ?? throw new InvalidOperationException(),
+            Total = sensorApiResponse.Metadata.Total,
+        };
     }
 
-    protected string BuildEndpointUri(string endpoint, int? skip = null, int? limit = null)
+    private string BuildEndpointUri(string endpoint, int? skip = null, int? limit = null)
     {
-        var uriBuilder = new UriBuilder(new Uri(new Uri(this.baseUri), endpoint));
+        var uriBuilder = new UriBuilder(new Uri(new Uri(this._baseUri), endpoint));
         var queryParameters = new List<string>();
 
         if (skip != null) queryParameters.Add($"skip={skip}");

@@ -2,5 +2,6 @@
 
 public class SensorApiSettings
 {
-    public required string? ApiKey { get; init; }
+    public required string BaseUri { get; init; }
+    public required string ApiKey { get; init; }
 }
