@@ -139,7 +139,7 @@ public class PinnedCityService
         await repository.SaveChangesAsync();
     }
 
-    public async Task<bool> UserCanReadCityAsync(ClaimsPrincipal principal, PinnedCity resource)
+    public async Task<bool> UserCanReadCityAsync(ClaimsPrincipal principal, PinnedCityDto resource)
     {
         var user = await userService.GetUserAsync(principal);
 
@@ -148,12 +148,14 @@ public class PinnedCityService
         return await this.UserCanReadCityAsync(user, resource);
     }
 
-    public Task<bool> UserCanReadCityAsync(ApplicationUser user, PinnedCity resource)
+    public async Task<bool> UserCanReadCityAsync(ApplicationUser user, PinnedCityDto resource)
     {
-        return Task.FromResult(resource.UserId.Equals(user.Id));
+        var city = await repository.GetByIdAsync(resource.Id);
+
+        return city != null && city.UserId.Equals(user.Id);
     }
 
-    public async Task<bool> UserCanUpdateCityAsync(ClaimsPrincipal principal, PinnedCity resource)
+    public async Task<bool> UserCanUpdateCityAsync(ClaimsPrincipal principal, PinnedCityDto resource)
     {
         var user = await userService.GetUserAsync(principal);
 
@@ -162,12 +164,14 @@ public class PinnedCityService
         return await this.UserCanUpdateCityAsync(user, resource);
     }
 
-    public Task<bool> UserCanUpdateCityAsync(ApplicationUser user, PinnedCity resource)
+    public async Task<bool> UserCanUpdateCityAsync(ApplicationUser user, PinnedCityDto resource)
     {
-        return Task.FromResult(resource.UserId.Equals(user.Id));
+        var city = await repository.GetByIdAsync(resource.Id);
+
+        return city != null && city.UserId.Equals(user.Id);
     }
 
-    public async Task<bool> UserCanDeleteCityAsync(ClaimsPrincipal principal, PinnedCity resource)
+    public async Task<bool> UserCanDeleteCityAsync(ClaimsPrincipal principal, PinnedCityDto resource)
     {
         var user = await userService.GetUserAsync(principal);
 
@@ -176,8 +180,10 @@ public class PinnedCityService
         return await this.UserCanDeleteCityAsync(user, resource);
     }
 
-    public Task<bool> UserCanDeleteCityAsync(ApplicationUser user, PinnedCity resource)
+    public async Task<bool> UserCanDeleteCityAsync(ApplicationUser user, PinnedCityDto resource)
     {
-        return Task.FromResult(resource.UserId.Equals(user.Id));
+        var city = await repository.GetByIdAsync(resource.Id);
+
+        return city != null && city.UserId.Equals(user.Id);
     }
 }

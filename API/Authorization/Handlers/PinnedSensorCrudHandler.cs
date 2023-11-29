@@ -1,5 +1,6 @@
 ﻿using API.Authorization.Requirements;
 using API.Domain.Contracts.Services;
+using API.Domain.Dto;
 using API.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
@@ -7,11 +8,11 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 namespace API.Authorization.Handlers;
 
 public class PinnedSensorCrudHandler
-    (IPinnedSensorService pinnedSensorService) : AuthorizationHandler<OperationAuthorizationRequirement, PinnedSensor>
+    (IPinnedSensorService pinnedSensorService) : AuthorizationHandler<OperationAuthorizationRequirement, PinnedSensorDto>
 {
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
         OperationAuthorizationRequirement requirement,
-        PinnedSensor resource)
+        PinnedSensorDto resource)
     {
         if (requirement.Name == Operations.Read.Name)
         {

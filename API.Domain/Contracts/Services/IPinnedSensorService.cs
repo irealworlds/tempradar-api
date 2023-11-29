@@ -28,12 +28,12 @@ public interface IPinnedSensorService
     public Task DeletePinnedSensorAsync(PinnedSensorDto pinnedSensorDto);
     public Task DeletePinnedSensorAsync(Guid id);
 
-    public Task<bool> UserCanReadSensorAsync(ClaimsPrincipal principal, PinnedSensor resource);
-    public Task<bool> UserCanReadSensorAsync(ApplicationUser user, PinnedSensor resource);
+    public Task<bool> UserCanReadSensorAsync(ClaimsPrincipal principal, PinnedSensorDto resource);
+    public Task<bool> UserCanReadSensorAsync(ApplicationUser user, PinnedSensorDto resource);
 
-    public Task<bool> UserCanUpdateSensorAsync(ClaimsPrincipal principal, PinnedSensor resource);
-    public Task<bool> UserCanUpdateSensorAsync(ApplicationUser user, PinnedSensor resource);
+    public Task<bool> UserCanUpdateSensorAsync(ClaimsPrincipal principal, PinnedSensorDto resource);
+    public Task<bool> UserCanUpdateSensorAsync(ApplicationUser user, PinnedSensorDto resource);
 
-    public Task<bool> UserCanDeleteSensorAsync(ClaimsPrincipal principal, PinnedSensor resource);
-    public Task<bool> UserCanDeleteSensorAsync(ApplicationUser user, PinnedSensor resource);
+    public Task<bool> UserCanDeleteSensorAsync(ClaimsPrincipal principal, PinnedSensorDto resource);
+    public Task<bool> UserCanDeleteSensorAsync(ApplicationUser user, PinnedSensorDto resource);
 }

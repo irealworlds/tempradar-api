@@ -137,7 +137,7 @@ public class PinnedSensorService
         await repository.SaveChangesAsync();
     }
 
-    public async Task<bool> UserCanReadSensorAsync(ClaimsPrincipal principal, PinnedSensor resource)
+    public async Task<bool> UserCanReadSensorAsync(ClaimsPrincipal principal, PinnedSensorDto resource)
     {
         var user = await userService.GetUserAsync(principal);
 
@@ -146,12 +146,14 @@ public class PinnedSensorService
         return await this.UserCanReadSensorAsync(user, resource);
     }
 
-    public Task<bool> UserCanReadSensorAsync(ApplicationUser user, PinnedSensor resource)
+    public async Task<bool> UserCanReadSensorAsync(ApplicationUser user, PinnedSensorDto resource)
     {
-        return Task.FromResult(resource.UserId.Equals(user.Id));
+        var sensor = await repository.GetByIdAsync(resource.Id);
+
+        return sensor != null && sensor.UserId.Equals(user.Id);
     }
 
-    public async Task<bool> UserCanUpdateSensorAsync(ClaimsPrincipal principal, PinnedSensor resource)
+    public async Task<bool> UserCanUpdateSensorAsync(ClaimsPrincipal principal, PinnedSensorDto resource)
     {
         var user = await userService.GetUserAsync(principal);
 
@@ -160,12 +162,14 @@ public class PinnedSensorService
         return await this.UserCanUpdateSensorAsync(user, resource);
     }
 
-    public Task<bool> UserCanUpdateSensorAsync(ApplicationUser user, PinnedSensor resource)
+    public async Task<bool> UserCanUpdateSensorAsync(ApplicationUser user, PinnedSensorDto resource)
     {
-        return Task.FromResult(resource.UserId.Equals(user.Id));
+        var sensor = await repository.GetByIdAsync(resource.Id);
+
+        return sensor != null && sensor.UserId.Equals(user.Id);
     }
 
-    public async Task<bool> UserCanDeleteSensorAsync(ClaimsPrincipal principal, PinnedSensor resource)
+    public async Task<bool> UserCanDeleteSensorAsync(ClaimsPrincipal principal, PinnedSensorDto resource)
     {
         var user = await userService.GetUserAsync(principal);
 
@@ -174,8 +178,10 @@ public class PinnedSensorService
         return await this.UserCanDeleteSensorAsync(user, resource);
     }
 
-    public Task<bool> UserCanDeleteSensorAsync(ApplicationUser user, PinnedSensor resource)
+    public async Task<bool> UserCanDeleteSensorAsync(ApplicationUser user, PinnedSensorDto resource)
     {
-        return Task.FromResult(resource.UserId.Equals(user.Id));
+        var sensor = await repository.GetByIdAsync(resource.Id);
+
+        return sensor != null && sensor.UserId.Equals(user.Id);
     }
 }
