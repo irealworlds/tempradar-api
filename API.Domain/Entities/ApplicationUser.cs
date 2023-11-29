@@ -8,4 +8,5 @@ public class ApplicationUser : IdentityUser
     public string LastName { get; set; } = String.Empty;
 
     public virtual IEnumerable<PinnedCity> PinnedCities { get; }
+    public virtual IEnumerable<PinnedSensor> PinnedSensors { get; }
 }
