@@ -2,6 +2,11 @@ services:
   api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 8001:80
+      - 8000:443
+    volumes:
+      - ~/.aspnet/https:/https:ro
   mailpit:
     image: axllent/mailpit
     ports:
