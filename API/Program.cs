@@ -77,6 +77,7 @@ builder.Services.AddScoped<IWeatherHistoryService, HistoryWeatherApiService>();
 builder.Services.AddScoped<IPinnedCityService, PinnedCityService>();
 builder.Services.AddScoped<IPinnedCityWeatherService, PinnedCityWeatherService>();
 builder.Services.AddScoped<ISensorsService, SensorsService>();
+builder.Services.AddScoped<IPinnedSensorService, PinnedSensorService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IAuthSessionService, AuthSessionService>();
 builder.Services.AddScoped<ISignInService, SignInService>();
@@ -84,9 +85,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 // Register repositories
 builder.Services.AddScoped<IPinnedCityRepository, PinnedCityRepository>();
+builder.Services.AddScoped<IPinnedSensorRepository, PinnedSensorRepository>();
 
 // Register authorization handlers
 builder.Services.AddScoped<IAuthorizationHandler, PinnedCityCrudHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, PinnedSensorCrudHandler>();
 
 var app = builder.Build();
 
