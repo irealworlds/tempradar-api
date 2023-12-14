@@ -12,5 +12,7 @@ public class PinnedSensorConfiguration : IEntityTypeConfiguration<PinnedSensor>
         builder.HasOne(x => x.User)
             .WithMany(u => u.PinnedSensors)
             .HasForeignKey(x => x.UserId);
+        builder.HasIndex(x => new { x.SensorId, x.UserId })
+            .IsUnique();
     }
 }

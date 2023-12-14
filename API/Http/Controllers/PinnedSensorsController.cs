@@ -42,8 +42,24 @@ public class PinnedSensorsController(IPinnedSensorService pinnedSensorService,
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] CreatePinnedSensorDto pinnedSensorDto)
     {
-        var sensor = await pinnedSensorService.CreateForUserAsync(this.HttpContext.User, pinnedSensorDto);
-        return this.CreatedAtAction(nameof(PinnedSensorsController.ShowAsync), new { id = sensor.Id }, sensor);
+        try
+        {
+            var sensor = await pinnedSensorService.CreateForUserAsync(this.HttpContext.User, pinnedSensorDto);
+            return this.CreatedAtAction(nameof(PinnedSensorsController.ShowAsync), new { id = sensor.Id }, sensor);
+        }
+        catch (InvalidOperationException exception)
+        {
+            // Handle other InvalidOperationExceptions if needed
+            var problemDetails = new ProblemDetails
+            {
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                Status = (int) HttpStatusCode.BadRequest,
+                Title = "Invalid Operation",
+                Detail = exception.Message,
+            };
+
+            return this.BadRequest(problemDetails);
+        }
     }
 
     [HttpGet("{id:guid}")]

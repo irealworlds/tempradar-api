@@ -73,6 +73,11 @@ public class PinnedSensorService
 
     public async Task<PinnedSensorDto> CreateForUserAsync(ApplicationUser user, CreatePinnedSensorDto data)
     {
+        if (await repository.ExistsAsync(e => e.SensorId.Equals(data.SensorId)))
+        {
+            throw new InvalidOperationException("A sensor can only be pinned once.");
+        }
+        
         var sensor = new PinnedSensor
         {
             Name = data.Name,
