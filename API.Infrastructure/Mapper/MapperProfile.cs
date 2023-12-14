@@ -12,5 +12,7 @@ public class MapperProfile : Profile
             .ReverseMap();
         this.CreateMap<PinnedCityDto, PinnedCity>()
             .ReverseMap();
+        this.CreateMap<PinnedSensorDto, PinnedSensor>()
+            .ReverseMap();
     }
 }
