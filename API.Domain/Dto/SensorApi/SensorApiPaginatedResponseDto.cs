@@ -1,12 +1,12 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace API.Domain.Dto.SensorApi;
 
 public class SensorApiPaginatedResponseDto<TEntity> where TEntity : class
 {
-    [JsonProperty("items")]
+    [JsonPropertyName("items")]
     public required IEnumerable<TEntity> Items { get; set; }
 
-    [JsonProperty("_meta")]
+    [JsonPropertyName("_metadata")]
     public required SensorApiPaginationMetadata Metadata { get; set; }
 }
