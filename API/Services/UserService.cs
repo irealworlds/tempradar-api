@@ -16,7 +16,8 @@ public class UserService : UserManager<ApplicationUser>, IUserService
         ILookupNormalizer keyNormalizer,
         IdentityErrorDescriber errors,
         IServiceProvider services,
-        ILogger<UserManager<ApplicationUser>> logger) : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
+        ILogger<UserManager<ApplicationUser>> logger) : base(store, optionsAccessor, passwordHasher, userValidators,
+        passwordValidators, keyNormalizer, errors, services, logger)
     {
     }
 }

@@ -8,9 +8,11 @@ public class MapperProfile : Profile
 {
     public MapperProfile()
     {
-        CreateMap<IdentityDto, ApplicationUser>()
+        this.CreateMap<IdentityDto, ApplicationUser>()
             .ReverseMap();
-        CreateMap<PinnedCityDto, PinnedCity>()
+        this.CreateMap<PinnedCityDto, PinnedCity>()
+            .ReverseMap();
+        this.CreateMap<PinnedSensorDto, PinnedSensor>()
             .ReverseMap();
     }
 }

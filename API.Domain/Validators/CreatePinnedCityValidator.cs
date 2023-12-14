@@ -7,13 +7,13 @@ public class CreatePinnedCityValidator : AbstractValidator<CreatePinnedCityDto>
 {
     public CreatePinnedCityValidator()
     {
-        RuleFor(x => x.Name);
-        RuleFor(x => x.Latitude)
+        this.RuleFor(x => x.Name);
+        this.RuleFor(x => x.Latitude)
             .NotNull()
             .NotEmpty()
             .GreaterThanOrEqualTo(-90)
             .LessThanOrEqualTo(90);
-        RuleFor(x => x.Longitude)
+        this.RuleFor(x => x.Longitude)
             .NotNull()
             .NotEmpty()
             .GreaterThanOrEqualTo(-180)

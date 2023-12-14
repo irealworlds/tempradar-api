@@ -6,14 +6,14 @@
         <Nullable>enable</Nullable>
         <RootNamespace>API.Application</RootNamespace>
     </PropertyGroup>
-    
+
     <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="12.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
+        <PackageReference Include="AutoMapper" Version="12.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\API.Domain\API.Domain.csproj" />
+        <ProjectReference Include="..\API.Domain\API.Domain.csproj"/>
     </ItemGroup>
 </Project>

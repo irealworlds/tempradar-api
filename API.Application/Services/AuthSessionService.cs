@@ -9,39 +9,31 @@ public class AuthSessionService(ISignInService signInService) : IAuthSessionServ
     public async Task Create(AuthSessionCreationDataDto data)
     {
         const bool isPersistent = true;
-        
+
         var result = await signInService.PasswordSignInAsync(
             data.Email,
             data.Password,
             isPersistent,
-            lockoutOnFailure: true
+            true
         );
-        
+
         if (result.RequiresTwoFactor)
         {
             if (!string.IsNullOrEmpty(data.TwoFactorCode))
-            {
                 result = await signInService.TwoFactorAuthenticatorSignInAsync(
                     data.TwoFactorCode,
                     isPersistent,
-                    rememberClient: isPersistent
+                    isPersistent
                 );
-            }
             else if (!string.IsNullOrEmpty(data.TwoFactorRecoveryCode))
-            {
                 result = await signInService.TwoFactorRecoveryCodeSignInAsync(
                     data.TwoFactorRecoveryCode
                 );
-            }
         }
 
-        if (!result.Succeeded)
-        {
-            throw new Exception("Could not perform authentication");
-        }
-        
+        if (!result.Succeeded) throw new Exception("Could not perform authentication");
+
         // The signInManager already produced the needed response in the form of a cookie or bearer token.
-        return;
     }
 
     public async Task InvalidateCurrentSession()

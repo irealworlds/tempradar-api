@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace API.Domain.Dto.WeatherApi
+namespace API.Domain.Dto.WeatherApi;
+
+public class ForecastDto
 {
-    public class ForecastDto
-    {
-        [JsonProperty("forecastday")]
-        public IEnumerable<DailyForecastDto>? DailyForecasts { get; set; }
-    }
+    [JsonProperty("forecastday")] public IEnumerable<DailyForecastDto>? DailyForecasts { get; set; }
 }

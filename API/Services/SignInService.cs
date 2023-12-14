@@ -15,7 +15,8 @@ public class SignInService : SignInManager<ApplicationUser>, ISignInService
         IOptions<IdentityOptions> optionsAccessor,
         ILogger<SignInManager<ApplicationUser>> logger,
         IAuthenticationSchemeProvider schemes,
-        IUserConfirmation<ApplicationUser> confirmation) : base(userManager, contextAccessor, claimsFactory, optionsAccessor, logger, schemes, confirmation)
+        IUserConfirmation<ApplicationUser> confirmation) : base(userManager, contextAccessor, claimsFactory,
+        optionsAccessor, logger, schemes, confirmation)
     {
     }
 }

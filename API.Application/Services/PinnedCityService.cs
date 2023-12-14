@@ -1,26 +1,24 @@
+using System.Linq.Expressions;
+using System.Security.Claims;
 using API.Application.Contracts;
 using API.Domain.Contracts.Services;
 using API.Domain.Dto;
 using API.Domain.Entities;
 using API.Domain.Repositories;
-using System.Linq.Expressions;
-using System.Security.Claims;
 using AutoMapper;
 
 namespace API.Application.Services;
 
-public class PinnedCityService(IUserService userService, IPinnedCityRepository repository, IMapper mapper) : IPinnedCityService
+public class PinnedCityService
+    (IUserService userService, IPinnedCityRepository repository, IMapper mapper) : IPinnedCityService
 {
     public async Task<IEnumerable<PinnedCityDto>> GetForUserAsync(ClaimsPrincipal principal)
     {
         var user = await userService.GetUserAsync(principal);
 
-        if (user == null)
-        {
-            throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
-        }
+        if (user == null) throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
 
-        return await GetForUserAsync(user);
+        return await this.GetForUserAsync(user);
     }
 
     public async Task<IEnumerable<PinnedCityDto>> GetForUserAsync(ApplicationUser user)
@@ -33,21 +31,21 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
         return cities.Select(mapper.Map<PinnedCityDto>);
     }
 
-    public async Task<PaginatedResultDto<PinnedCityDto>> GetPaginatedForUserAsync(ClaimsPrincipal principal, PaginationOptionsDto pagination)
+    public async Task<PaginatedResultDto<PinnedCityDto>> GetPaginatedForUserAsync(ClaimsPrincipal principal,
+        PaginationOptionsDto pagination)
     {
         var user = await userService.GetUserAsync(principal);
 
-        if (user == null)
-        {
-            throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
-        }
+        if (user == null) throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
 
-        return await GetPaginatedForUserAsync(user, pagination);
+        return await this.GetPaginatedForUserAsync(user, pagination);
     }
 
-    public async Task<PaginatedResultDto<PinnedCityDto>> GetPaginatedForUserAsync(ApplicationUser user, PaginationOptionsDto pagination)
+    public async Task<PaginatedResultDto<PinnedCityDto>> GetPaginatedForUserAsync(ApplicationUser user,
+        PaginationOptionsDto pagination)
     {
-        var cityFilterExpressions = new List<Expression<Func<PinnedCity, bool>>> {
+        var cityFilterExpressions = new List<Expression<Func<PinnedCity, bool>>>
+        {
             city => city.UserId.Equals(user.Id)
         };
 
@@ -69,12 +67,9 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
     {
         var user = await userService.GetUserAsync(principal);
 
-        if (user == null)
-        {
-            throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
-        }
+        if (user == null) throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
 
-        return await CreateForUserAsync(user, data);
+        return await this.CreateForUserAsync(user, data);
     }
 
     public async Task<PinnedCityDto> CreateForUserAsync(ApplicationUser user, CreatePinnedCityDto data)
@@ -88,12 +83,8 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
             UserId = user.Id
         };
 
-        if (String.IsNullOrEmpty(city.Name))
-        {
-            city.Name = "Unknown";
-            // TODO Replace this with automatic recognition based on Lat/Lng
-        }
-
+        if (string.IsNullOrEmpty(city.Name)) city.Name = "Unknown";
+        // TODO Replace this with automatic recognition based on Lat/Lng
         await repository.AddAsync(city);
         await repository.SaveChangesAsync();
 
@@ -111,23 +102,17 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
     {
         var city = await repository.GetByIdAsync(id);
 
-        if (city == null)
-        {
-            throw new ArgumentException("Could not find pinned city by id: " + id, nameof(id));
-        }
+        if (city == null) throw new ArgumentException("Could not find pinned city by id: " + id, nameof(id));
 
-        return await UpdatePinnedCityAsync(mapper.Map<PinnedCityDto>(city), pinnedCityDto);
+        return await this.UpdatePinnedCityAsync(mapper.Map<PinnedCityDto>(city), pinnedCityDto);
     }
 
     public async Task<PinnedCityDto> UpdatePinnedCityAsync(PinnedCityDto cityDto, CreatePinnedCityDto pinnedCityDto)
     {
         var city = await repository.GetByIdAsync(cityDto.Id);
 
-        if (city == null)
-        {
-            throw new ArgumentException("City not found", nameof(cityDto));
-        }
-        
+        if (city == null) throw new ArgumentException("City not found", nameof(cityDto));
+
         city.Name = pinnedCityDto.Name;
         city.Longitude = pinnedCityDto.Longitude;
         city.Latitude = pinnedCityDto.Latitude;
@@ -140,7 +125,7 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
 
     public async Task DeletePinnedCityAsync(PinnedCityDto pinnedCityDto)
     {
-        await DeletePinnedCityAsync(pinnedCityDto.Id);
+        await this.DeletePinnedCityAsync(pinnedCityDto.Id);
     }
 
     public async Task DeletePinnedCityAsync(Guid id)
@@ -148,62 +133,57 @@ public class PinnedCityService(IUserService userService, IPinnedCityRepository r
         var pinnedCityToDelete = await repository.GetByIdAsync(id);
 
         if (pinnedCityToDelete == null)
-        {
             throw new ArgumentException("Could not find pinned city by id: " + id, nameof(id));
-        }
-        
+
         await repository.DeleteAsync(pinnedCityToDelete);
         await repository.SaveChangesAsync();
     }
 
-    public async Task<bool> UserCanReadCityAsync(ClaimsPrincipal principal, PinnedCity resource)
+    public async Task<bool> UserCanReadCityAsync(ClaimsPrincipal principal, PinnedCityDto resource)
     {
         var user = await userService.GetUserAsync(principal);
 
-        if (user == null)
-        {
-            throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
-        }
+        if (user == null) throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
 
-        return await UserCanReadCityAsync(user, resource);
+        return await this.UserCanReadCityAsync(user, resource);
     }
 
-    public Task<bool> UserCanReadCityAsync(ApplicationUser user, PinnedCity resource)
+    public async Task<bool> UserCanReadCityAsync(ApplicationUser user, PinnedCityDto resource)
     {
-        return Task.FromResult(resource.UserId.Equals(user.Id));
+        var city = await repository.GetByIdAsync(resource.Id);
+
+        return city != null && city.UserId.Equals(user.Id);
     }
 
-    public async Task<bool> UserCanUpdateCityAsync(ClaimsPrincipal principal, PinnedCity resource)
-    {
-        var user = await userService.GetUserAsync(principal);
-
-        if (user == null)
-        {
-            throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
-        }
-
-        return await UserCanUpdateCityAsync(user, resource);
-    }
-
-    public Task<bool> UserCanUpdateCityAsync(ApplicationUser user, PinnedCity resource)
-    {
-        return Task.FromResult(resource.UserId.Equals(user.Id));
-    }
-
-    public async Task<bool> UserCanDeleteCityAsync(ClaimsPrincipal principal, PinnedCity resource)
+    public async Task<bool> UserCanUpdateCityAsync(ClaimsPrincipal principal, PinnedCityDto resource)
     {
         var user = await userService.GetUserAsync(principal);
 
-        if (user == null)
-        {
-            throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
-        }
+        if (user == null) throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
 
-        return await UserCanDeleteCityAsync(user, resource);
+        return await this.UserCanUpdateCityAsync(user, resource);
     }
 
-    public Task<bool> UserCanDeleteCityAsync(ApplicationUser user, PinnedCity resource)
+    public async Task<bool> UserCanUpdateCityAsync(ApplicationUser user, PinnedCityDto resource)
     {
-        return Task.FromResult(resource.UserId.Equals(user.Id));
+        var city = await repository.GetByIdAsync(resource.Id);
+
+        return city != null && city.UserId.Equals(user.Id);
+    }
+
+    public async Task<bool> UserCanDeleteCityAsync(ClaimsPrincipal principal, PinnedCityDto resource)
+    {
+        var user = await userService.GetUserAsync(principal);
+
+        if (user == null) throw new ArgumentException("Could not find user for claims principal.", nameof(principal));
+
+        return await this.UserCanDeleteCityAsync(user, resource);
+    }
+
+    public async Task<bool> UserCanDeleteCityAsync(ApplicationUser user, PinnedCityDto resource)
+    {
+        var city = await repository.GetByIdAsync(resource.Id);
+
+        return city != null && city.UserId.Equals(user.Id);
     }
 }

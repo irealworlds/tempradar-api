@@ -127,6 +127,37 @@ namespace API.Infrastructure.Migrations
                     b.ToTable("PinnedCities");
                 });
 
+            modelBuilder.Entity("API.Domain.Entities.PinnedSensor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SensorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("SensorId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("PinnedSensors");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -271,6 +302,17 @@ namespace API.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("API.Domain.Entities.PinnedSensor", b =>
+                {
+                    b.HasOne("API.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("PinnedSensors")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -325,6 +367,8 @@ namespace API.Infrastructure.Migrations
             modelBuilder.Entity("API.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("PinnedCities");
+
+                    b.Navigation("PinnedSensors");
                 });
 #pragma warning restore 612, 618
         }

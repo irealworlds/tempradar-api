@@ -1,22 +1,24 @@
+using System.Net;
+using System.Reflection;
 using API.Application.Contracts;
 using API.Application.Services;
+using API.Authorization.Handlers;
 using API.Domain.Contracts.Configuration;
 using API.Domain.Contracts.Services;
 using API.Domain.Entities;
 using API.Domain.Repositories;
 using API.Infrastructure.Database;
 using API.Infrastructure.Repositories;
+using API.Infrastructure.SensorApi.Services;
 using API.Infrastructure.WeatherApi.Services;
 using API.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using API.Authorization.Handlers;
-using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,11 +29,16 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
     .AddIdentityCookies()
     .ApplicationCookie!.Configure(opt =>
     {
-        opt.Events = new CookieAuthenticationEvents()
+        opt.Events = new CookieAuthenticationEvents
         {
             OnRedirectToLogin = ctx =>
             {
-                ctx.Response.StatusCode = 401;
+                ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                return Task.CompletedTask;
+            },
+            OnRedirectToAccessDenied = ctx =>
+            {
+                ctx.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                 return Task.CompletedTask;
             }
         };
@@ -68,13 +75,18 @@ builder.Services.AddAutoMapper(
 // Enable the HTTP Client
 builder.Services.AddHttpClient();
 
-// Register application services
+// Register configuration
 builder.Services.Configure<WeatherApiSettings>(builder.Configuration.GetSection("WeatherAPI"));
+builder.Services.Configure<SensorApiSettings>(builder.Configuration.GetSection("SensorAPI"));
+
+// Register application services
 builder.Services.AddScoped<IWeatherForecastService, ForecastWeatherApiService>();
 builder.Services.AddScoped<ICurrentWeatherService, CurrentWeatherApiService>();
 builder.Services.AddScoped<IWeatherHistoryService, HistoryWeatherApiService>();
 builder.Services.AddScoped<IPinnedCityService, PinnedCityService>();
 builder.Services.AddScoped<IPinnedCityWeatherService, PinnedCityWeatherService>();
+builder.Services.AddScoped<ISensorsService, SensorsService>();
+builder.Services.AddScoped<IPinnedSensorService, PinnedSensorService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IAuthSessionService, AuthSessionService>();
 builder.Services.AddScoped<ISignInService, SignInService>();
@@ -82,9 +94,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 // Register repositories
 builder.Services.AddScoped<IPinnedCityRepository, PinnedCityRepository>();
+builder.Services.AddScoped<IPinnedSensorRepository, PinnedSensorRepository>();
 
 // Register authorization handlers
 builder.Services.AddScoped<IAuthorizationHandler, PinnedCityCrudHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, PinnedSensorCrudHandler>();
 
 var app = builder.Build();
 

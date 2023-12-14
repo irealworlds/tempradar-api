@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace API.Application.Services;
 
-public class IdentityService(UserManager<ApplicationUser> userManager, IUserStore<ApplicationUser> userStore, IMapper mapper) : IIdentityService
+public class IdentityService(UserManager<ApplicationUser> userManager, IUserStore<ApplicationUser> userStore,
+    IMapper mapper) : IIdentityService
 {
     // Validate the email address using DataAnnotations like the UserValidator does when RequireUniqueEmail = true.
     private static readonly EmailAddressAttribute EmailAddressAttribute = new();
@@ -17,10 +18,7 @@ public class IdentityService(UserManager<ApplicationUser> userManager, IUserStor
     {
         var user = await userManager.GetUserAsync(principal);
 
-        if (user == null)
-        {
-            return null;
-        }
+        if (user == null) return null;
 
         return mapper.Map<IdentityDto>(user);
     }
@@ -28,17 +26,13 @@ public class IdentityService(UserManager<ApplicationUser> userManager, IUserStor
     public async Task<IdentityDto> CreateIdentity(IdentityCreationDataDto data)
     {
         if (!userManager.SupportsUserEmail)
-        {
-            throw new NotSupportedException($"A user store with email support is required.");
-        }
-        
+            throw new NotSupportedException("A user store with email support is required.");
+
         var emailStore = (IUserEmailStore<ApplicationUser>)userStore;
         var email = data.Email;
 
-        if (string.IsNullOrEmpty(email) || !EmailAddressAttribute.IsValid(email))
-        {
+        if (string.IsNullOrEmpty(email) || !IdentityService.EmailAddressAttribute.IsValid(email))
             throw new ArgumentException(userManager.ErrorDescriber.InvalidEmail(email).Description, nameof(data));
-        }
 
         var user = new ApplicationUser();
         await userStore.SetUserNameAsync(user, email, CancellationToken.None);
@@ -47,10 +41,7 @@ public class IdentityService(UserManager<ApplicationUser> userManager, IUserStor
         user.LastName = data.LastName;
         var result = await userManager.CreateAsync(user, data.Password);
 
-        if (!result.Succeeded)
-        {
-            throw new ArgumentException(result.Errors.ToString(), nameof(data));
-        }
+        if (!result.Succeeded) throw new ArgumentException(result.Errors.ToString(), nameof(data));
 
         // TODO
         // await SendConfirmationEmailAsync(user, userManager, context, email);
