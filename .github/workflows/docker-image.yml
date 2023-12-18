@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag irealworlds/tempradar-api:latest
+      run: docker build . --file ./API/Dockerfile --tag irealworlds/tempradar-api:latest
